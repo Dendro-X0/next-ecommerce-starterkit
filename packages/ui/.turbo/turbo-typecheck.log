@@ -1,0 +1,4 @@
+
+> @repo/ui@0.1.0 typecheck G:\Web Development Project\Codebases\starterkit-boilerplate\ecommerce-workspace\next-ecommerce-starterkit\packages\ui
+> tsc -p tsconfig.json --noEmit
+

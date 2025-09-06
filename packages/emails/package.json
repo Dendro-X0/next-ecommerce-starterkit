@@ -1,0 +1,50 @@
+{
+  "name": "@repo/emails",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./order-created-email": {
+      "types": "./dist/order-created-email.d.ts",
+      "default": "./dist/order-created-email.js"
+    },
+    "./order-paid-email": {
+      "types": "./dist/order-paid-email.d.ts",
+      "default": "./dist/order-paid-email.js"
+    },
+    "./order-cancelled-email": {
+      "types": "./dist/order-cancelled-email.d.ts",
+      "default": "./dist/order-cancelled-email.js"
+    },
+    "./order-shipped-email": {
+      "types": "./dist/order-shipped-email.d.ts",
+      "default": "./dist/order-shipped-email.js"
+    },
+    "./order-refunded-email": {
+      "types": "./dist/order-refunded-email.d.ts",
+      "default": "./dist/order-refunded-email.js"
+    }
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0 <20",
+    "react-dom": ">=18.2.0 <20"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4"
+  }
+}

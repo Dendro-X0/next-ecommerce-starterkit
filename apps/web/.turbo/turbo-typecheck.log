@@ -1,0 +1,4 @@
+
+> web@1.0.0 typecheck G:\Web Development Project\Codebases\starterkit-boilerplate\ecommerce-workspace\next-ecommerce-starterkit\apps\web
+> tsc -p tsconfig.json --noEmit
+

@@ -1,0 +1,21 @@
+
+> web@1.0.0 build G:\Web Development Project\Codebases\starterkit-boilerplate\ecommerce-workspace\next-ecommerce-starterkit\apps\web
+> next build
+
+   ▲ Next.js 15.4.6
+
+   Creating an optimized production build ...
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: EPERM: operation not permitted, rename 'G:\Web Development Project\Codebases\starterkit-boilerplate\ecommerce-workspace\next-ecommerce-starterkit\apps\web\.next\cache\webpack\server-production\0.pack_' -> 'G:\Web Development Project\Codebases\starterkit-boilerplate\ecommerce-workspace\next-ecommerce-starterkit\apps\web\.next\cache\webpack\server-production\0.pack'
+Failed to compile.
+
+./src/actions/user.ts
+Module not found: Can't resolve '@/lib/auth'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./src/app/user/page.tsx
+
+
+> Build failed because of webpack errors
+ ELIFECYCLE  Command failed with exit code 1.

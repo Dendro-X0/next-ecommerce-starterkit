@@ -1,0 +1,157 @@
+
+> web@1.0.0 lint G:\Web Development Project\Codebases\starterkit-boilerplate\ecommerce-workspace\next-ecommerce-starterkit\apps\web
+> next lint
+
+
+./src/actions/user/disable-2fa.ts
+14:3  Warning: '_prev' is defined but never used.  @typescript-eslint/no-unused-vars
+15:3  Warning: '_formData' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/actions/user/generate-backup-codes.ts
+15:3  Warning: '_prev' is defined but never used.  @typescript-eslint/no-unused-vars
+16:3  Warning: '_formData' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/actions/user/resend-verification-email.ts
+34:3  Warning: '_prev' is defined but never used.  @typescript-eslint/no-unused-vars
+35:3  Warning: '_formData' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/(shop)/cart/page.tsx
+22:35  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+25:19  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+51:39  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/(shop)/categories/[slug]/page.tsx
+108:9  Warning: The 'categoryProducts' logical expression could make the dependencies of useMemo Hook (at line 155) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'categoryProducts' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+190:29  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/(shop)/contact/page.tsx
+24:9  Warning: Unused eslint-disable directive (no problems were reported from 'react/no-danger').
+61:45  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/(shop)/order-success/[orderId]/page.tsx
+97:19  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/(shop)/products/[slug]/page.tsx
+417:51  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/(shop)/shop/page.tsx
+89:9  Warning: The 'items' logical expression could make the dependencies of useMemo Hook (at line 128) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'items' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+162:29  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/customers/reviews/page.tsx
+58:9  Warning: The 'items' logical expression could make the dependencies of useMemo Hook (at line 71) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'items' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+
+./src/app/dashboard/admin/marketing/affiliate/page.tsx
+69:9  Warning: The 'items' logical expression could make the dependencies of useMemo Hook (at line 88) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'items' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+
+./src/app/dashboard/admin/orders/page.tsx
+41:9  Warning: The 'orders' logical expression could make the dependencies of useMemo Hook (at line 48) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'orders' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+157:31  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/_components/customers-table.tsx
+170:46  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/_components/dashboard-overview.tsx
+4:10  Warning: 'Badge' is defined but never used.  @typescript-eslint/no-unused-vars
+8:3  Warning: 'ArrowDownRight' is defined but never used.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'ArrowUpRight' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/_components/nav-main.tsx
+48:15  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+53:37  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+64:47  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/_components/nav-projects.tsx
+50:32  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+57:36  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/_components/nav-user.tsx
+32:32  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/_components/orders-table.tsx
+151:46  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/_components/product-form.tsx
+55:10  Warning: 'debug' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+148:9  Warning: 'weightValue' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+149:9  Warning: 'digitalVersionValue' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+187:17  Warning: 'product' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/_components/products-table.tsx
+55:9  Warning: The 'items' logical expression could make the dependencies of useMemo Hook (at line 62) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'items' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+98:19  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+164:25  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+213:46  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/admin/_components/team-switcher.tsx
+33:32  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/affiliate/page.tsx
+34:36  Warning: 'clicksLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/user/orders/page.tsx
+41:9  Warning: The 'orders' logical expression could make the dependencies of useMemo Hook (at line 52) change on every render. To fix this, wrap the initialization of 'orders' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+195:31  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/page.tsx
+90:9  Warning: The 'orders' logical expression could make the dependencies of useMemo Hook (at line 106) change on every render. To fix this, wrap the initialization of 'orders' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+90:9  Warning: The 'orders' logical expression could make the dependencies of useMemo Hook (at line 131) change on every render. To fix this, wrap the initialization of 'orders' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+90:9  Warning: The 'orders' logical expression could make the dependencies of useMemo Hook (at line 193) change on every render. To fix this, wrap the initialization of 'orders' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+205:19  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+205:26  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+230:41  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+268:45  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+300:41  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+330:43  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+343:53  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+376:43  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+392:87  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/reviews/page.tsx
+95:9  Warning: The 'userReviews' logical expression could make the dependencies of useMemo Hook (at line 136) change on every render. To fix this, wrap the initialization of 'userReviews' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+95:9  Warning: The 'userReviews' logical expression could make the dependencies of useMemo Hook (at line 137) change on every render. To fix this, wrap the initialization of 'userReviews' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+95:9  Warning: The 'userReviews' logical expression could make the dependencies of useMemo Hook (at line 140) change on every render. To fix this, wrap the initialization of 'userReviews' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+
+./src/app/dashboard/user/settings/layout.tsx
+32:60  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/settings/security/page.tsx
+15:10  Warning: 'Label' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/user/wishlist/page.tsx
+200:87  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/_components/dashboard-header.tsx
+68:49  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+72:45  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/_components/membership-card.tsx
+41:54  Warning: '_' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/user/_components/quick-actions.tsx
+26:83  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+32:83  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+38:83  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+44:83  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/_components/recent-orders.tsx
+58:76  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/_components/user-sidebar.tsx
+78:42  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+98:36  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+114:19  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+130:42  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/app/dashboard/user/_components/wishlist-preview.tsx
+40:47  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+72:83  Warning: Avoid using 'asChild' in app code. Prefer our shims (e.g., Button shim) or ensure exactly one non-Fragment child.  no-restricted-syntax
+
+./src/lib/cart/hydrator.tsx
+41:6  Warning: React Hook useEffect has missing dependencies: 'currentItems', 'data', and 'hydrate'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/lib/utils/toast.ts
+52:3  Warning: 'options' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+ ELIFECYCLE  Command failed with exit code 1.
