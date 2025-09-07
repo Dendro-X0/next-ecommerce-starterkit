@@ -7,7 +7,9 @@ export const apiEnv = (() => {
   // Prefer explicit WEB_ORIGIN, but gracefully fall back to APP_URL or NEXT_PUBLIC_APP_URL
   // to avoid crashes in local/dev when WEB_ORIGIN is not set.
   const raw = {
-    WEB_ORIGIN: process.env.WEB_ORIGIN || process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL,
+    WEB_ORIGIN:
+      process.env.WEB_ORIGIN || process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL ||
+      "http://localhost:3000",
     ADMIN_EMAILS: process.env.ADMIN_EMAILS ?? "",
     AFFILIATE_COMMISSION_PCT: process.env.AFFILIATE_COMMISSION_PCT ?? "10",
     TAX_RATE: process.env.TAX_RATE ?? "0.08",
@@ -30,7 +32,7 @@ export const apiEnv = (() => {
   } as const
 
   const schema = z.object({
-    WEB_ORIGIN: z.string().url("WEB_ORIGIN must be a valid URL"),
+    WEB_ORIGIN: z.string().url("WEB_ORIGIN must be a valid URL").default("http://localhost:3000"),
     ADMIN_EMAILS: z.string().optional().default(""),
     AFFILIATE_COMMISSION_PCT: z.preprocess((v) => {
       if (typeof v !== "string") return v
@@ -136,13 +138,15 @@ export const apiEnv = (() => {
   const isProd: boolean = process.env.NODE_ENV === "production"
   if (isProd) {
     if (!RESEND_CONFIGURED) {
-      throw new Error(
-        "Production requires transactional email configured: set RESEND_API_KEY and EMAIL_FROM.",
+      // Warn instead of throwing to allow minimal deployments (e.g., no emails in preview/demo)
+      console.warn(
+        "[api/env] RESEND not configured (RESEND_API_KEY/EMAIL_FROM). Transactional emails will be skipped.",
       )
     }
     if (!STRIPE_CONFIGURED && !PAYPAL_CONFIGURED) {
-      throw new Error(
-        "Production requires at least one payment provider configured: Stripe (STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET) or PayPal (PAYPAL_CLIENT_ID + PAYPAL_CLIENT_SECRET + PAYPAL_WEBHOOK_ID).",
+      // Warn instead of throwing to allow minimal deployments (e.g., no payments in preview/demo)
+      console.warn(
+        "[api/env] No payment provider configured. Stripe/PayPal endpoints will be disabled.",
       )
     }
   }
