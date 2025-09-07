@@ -10,6 +10,16 @@ This document outlines the strategic plan for developing the backend of the Modu
 
 ---
 
+## V1.0 Remaining Checklist (Short)
+
+- [ ] Reviews: Admin moderation UI page and PDP integration (list + submit)
+- [ ] Affiliate (U6): tests only — unit (repo), integration (routes), E2E (?ref → cookie → order → conversion)
+- [ ] Wishlist: E2E stabilization per `UNRESOLVED_ISSUES.md` (PDP/PLP toggles, badge)
+- [ ] CI hardening: Turbo cache, test artifacts (screenshots/HTML)
+- [ ] Deployment docs: Vercel env matrix, DB migration/runbook
+
+---
+
 ## Post-1.0 Roadmap (Active)
 
 The detailed sections below are historical. For the current plan post-1.0, track work via GitHub issues and milestones in the repository.
@@ -185,6 +195,8 @@ Each phase lists scope and acceptance criteria to minimize ambiguity.
 - API: `/wishlist`, `/wishlist/items` (add/remove).
 - FE: `wishlist.ts`; PDP heart toggle; dashboard wishlist.
 - Accept: Add/remove works; dashboard reflects live data.
+ 
+Status: Completed (core flows implemented). Remaining work tracked under "U4: Wishlist — Completion & Hardening" and E2E stabilization tasks.
 
 ### U5: Reviews
 
@@ -244,25 +256,25 @@ This section details a step-by-step implementation plan focusing on the dashboar
 ### U4: Wishlist — Completion & Hardening
 
 1. API Route Typing Fixes (`packages/api/src/routes/wishlist.ts`)
-   - [ ] Parse JSON body safely and validate with Zod (e.g., `{ productId: string }`).
-   - [ ] Remove TS2339 by narrowing `body` before access; return `{ error }` envelopes with appropriate status codes.
-   - [ ] Ensure add/remove are idempotent and consistently typed.
+   - [x] Parse JSON body safely and validate with Zod (e.g., `{ productId: string }`).
+   - [x] Remove TS2339 by narrowing `body` before access; return `{ error }` envelopes with appropriate status codes.
+   - [x] Ensure add/remove are idempotent and consistently typed.
 
 2. Repository & Schema Review
-   - [ ] Verify `packages/db/src/repositories/wishlists-repo.ts` add/remove semantics and return shapes.
-   - [ ] Confirm `packages/db/src/schema/wishlists.ts` indexes support common queries.
+   - [x] Verify `packages/db/src/repositories/wishlists-repo.ts` add/remove semantics and return shapes.
+   - [x] Confirm `packages/db/src/schema/wishlists.ts` indexes support common queries.
 
 3. Frontend Client & Query Keys
-   - [ ] Ensure `apps/web/src/lib/data/wishlist.ts` methods have strict types and map to API responses.
-   - [ ] Use TanStack Query for all mutations; invalidate wishlist query keys in `apps/web/src/lib/wishlist/query-keys.ts` after success.
+   - [x] Ensure `apps/web/src/lib/data/wishlist.ts` methods have strict types and map to API responses.
+   - [x] Use TanStack Query for all mutations; invalidate wishlist query keys in `apps/web/src/lib/wishlist/query-keys.ts` after success.
 
 4. UI Wiring
-   - [ ] PLP toggle: `modules/shop/components/product/product-card.tsx` uses mutation with loading/disabled states; `data-testid="plp-wishlist-toggle(-button)"` intact.
-   - [ ] PDP toggle: ensure `pdp-wishlist-toggle` renders post-hydration and after product fetch; handle optimistic state.
-   - [ ] Header badge: `modules/shared/components/header.tsx` hides when count is 0; updates after mutations.
+   - [x] PLP toggle: `modules/shop/components/product/product-card.tsx` uses mutation with loading/disabled states; `data-testid="plp-wishlist-toggle(-button)"` intact.
+   - [x] PDP toggle: ensure `pdp-wishlist-toggle` renders post-hydration and after product fetch; handle optimistic state.
+   - [x] Header badge: `modules/shared/components/header.tsx` hides when count is 0; updates after mutations.
 
 5. Seeds
-   - [ ] Ensure dev seeds include a known product slug and a category used in tests to make PLP/PDP deterministic.
+   - [x] Ensure dev seeds include a known product slug and a category used in tests to make PLP/PDP deterministic.
 
 6. E2E Stabilization (see `UNRESOLVED_ISSUES.md`)
    - [ ] PDP spec: navigate to seeded slug; on failure, capture console, URL, and partial HTML.
@@ -279,46 +291,46 @@ This section details a step-by-step implementation plan focusing on the dashboar
 ### U6: Affiliate — Dashboard-first Delivery
 
 1. DB Schema (`packages/db/src/schema/affiliate.ts`)
-   - [ ] `affiliate_profiles` (id, userId unique, code unique, createdAt, updatedAt)
-   - [ ] `affiliate_clicks` (id, code, userId?, ipHash, userAgentHash, source?, createdAt, convertedAt?)
-   - [ ] `affiliate_conversions` (id, clickId, orderId unique, userId?, code, commissionCents, status: pending|approved|paid, createdAt, paidAt?)
-   - [ ] Indexes by `code`, `status`, `createdAt`.
+   - [x] `affiliate_profiles` (id, userId unique, code unique, createdAt, updatedAt)
+   - [x] `affiliate_clicks` (id, code, userId?, ipHash, userAgentHash, source?, createdAt, convertedAt?)
+   - [x] `affiliate_conversions` (id, clickId, orderId unique, userId?, code, commissionCents, status: pending|approved|paid, createdAt, paidAt?)
+   - [x] Indexes by `code`, `status`, `createdAt`.
 
 2. Repositories (`packages/db/src/repositories/affiliate-repo.ts`)
-   - [ ] Profiles: `getByUserId`, `getByCode`, `upsertForUser`, `regenerateCode`.
-   - [ ] Clicks: `createClick`, `listByCode(limit)`, `markConverted` with dedupe window.
-   - [ ] Conversions: `create`, `getByOrderId`, `listByCode({ status, limit })`, `updateStatus`.
+   - [x] Profiles: `getByUserId`, `getByCode`, `upsertForUser`, `regenerateCode`.
+   - [x] Clicks: `createClick`, `listByCode(limit)`, `markConverted` with dedupe window.
+   - [x] Conversions: `create`, `getByOrderId`, `listByCode({ status, limit })`, `updateStatus`.
 
 3. API Routes (`packages/api/src/routes/affiliate.ts`)
-   - [ ] Public: `POST /api/v1/affiliate/track` (body: { code, source? }) → create click, set cookie `AFF_REF`.
-   - [ ] User: `GET /api/v1/affiliate/me` (profile + stats), `POST /api/v1/affiliate/me/code` (regenerate), `GET /api/v1/affiliate/me/clicks`, `GET /api/v1/affiliate/me/conversions`.
-   - [ ] Admin: `GET /api/v1/admin/affiliate/conversions?status&limit`, `PATCH /api/v1/admin/affiliate/conversions/:id`.
+   - [x] Public: `POST /api/v1/affiliate/track` (body: { code, source? }) → create click, set cookie `AFF_REF`.
+   - [x] User: `GET /api/v1/affiliate/me` (profile + stats), `POST /api/v1/affiliate/me/code` (regenerate), `GET /api/v1/affiliate/me/clicks`, `GET /api/v1/affiliate/me/conversions`.
+   - [x] Admin: `GET /api/v1/admin/affiliate/conversions?status&limit`, `PATCH /api/v1/admin/affiliate/conversions/:id`.
 
 4. Route Mounting (`packages/api/src/app.ts`)
-   - [ ] `app.route("/api/v1/affiliate", affiliateRoute)`; re-use `ensureAdmin` for admin subpaths.
+   - [x] `app.route("/api/v1/affiliate", affiliateRoute)`; re-use `ensureAdmin` for admin subpaths.
 
 5. Order Attribution
-   - [ ] Extend `packages/db/src/schema/orders.ts` with: `affiliateCode`, `affiliateClickId`, `affiliateCommissionCents`, `affiliatePayoutStatus`.
-   - [ ] In `packages/api/src/routes/orders.ts` `.post("/")`: read `AFF_REF` cookie; resolve to profile/click; create `affiliate_conversions` for `orderId`; mark click converted; persist attribution fields on the order.
+   - [x] Extend `packages/db/src/schema/orders.ts` with: `affiliateCode`, `affiliateClickId`, `affiliateCommissionCents`, `affiliatePayoutStatus`.
+   - [x] In `packages/api/src/routes/orders.ts` `.post("/")`: read `AFF_REF` cookie; resolve to profile/click; create `affiliate_conversions` for `orderId`; mark click converted; persist attribution fields on the order.
 
 6. Referral Capture
-   - [ ] Add middleware `apps/web/src/middleware.ts` to capture `?ref=` and set `AFF_REF` cookie (`SameSite=Lax; Max-Age=30d`).
-   - [ ] Add client util `apps/web/src/lib/data/affiliate.ts` method `trackClick()` for non-middleware capture (e.g., from landing pages).
+   - [x] Add middleware `apps/web/src/middleware.ts` to capture `?ref=` and set `AFF_REF` cookie (`SameSite=Lax; Max-Age=30d`).
+   - [x] Add client util `apps/web/src/lib/data/affiliate.ts` method `trackClick()` for non-middleware capture (e.g., from landing pages).
 
 7. Frontend Client + Query Keys
-   - [ ] `apps/web/src/lib/data/affiliate.ts`: `getMe`, `regenerateCode`, `listClicks`, `listConversions`, `trackClick`.
-   - [ ] `apps/web/src/lib/affiliate/query-keys.ts`: `me`, `clicks`, `conversions`.
+   - [x] `apps/web/src/lib/data/affiliate.ts`: `getMe`, `regenerateCode`, `listClicks`, `listConversions`, `trackClick`.
+   - [x] `apps/web/src/lib/affiliate/query-keys.ts`: `me`, `clicks`, `conversions`.
 
 8. Wire User Dashboard
-   - [ ] Replace mocks in `apps/web/src/app/dashboard/user/affiliate/page.tsx` with TanStack Query.
-   - [ ] Optimistic update on code regeneration; invalidate `me`.
+   - [x] Replace mocks in `apps/web/src/app/dashboard/user/affiliate/page.tsx` with TanStack Query.
+   - [x] Optimistic update on code regeneration; invalidate `me`.
 
 9. Admin Dashboard
-   - [ ] Implement `apps/web/src/app/dashboard/admin/marketing/affiliate/page.tsx` table for conversions with status filter + action (approve/paid).
-   - [ ] Extend `apps/web/src/lib/data/admin-api.ts` with `listAffiliateConversions`, `updateAffiliateConversionStatus`.
+   - [x] Implement `apps/web/src/app/dashboard/admin/marketing/affiliate/page.tsx` table for conversions with status filter + action (approve/paid).
+   - [x] Extend `apps/web/src/lib/data/admin-api.ts` with `listAffiliateConversions`, `updateAffiliateConversionStatus`.
 
 10. Seeds & Tests
-   - [ ] Dev seeds for profiles/clicks/conversions.
+   - [x] Dev seeds for profiles/clicks/conversions.
    - [ ] Unit tests: repositories; integration: route handlers; E2E: `?ref=` → cookie → order → conversion.
 
 ---
@@ -376,7 +388,7 @@ This section details a step-by-step implementation plan focusing on the dashboar
 ### Store Area Follow-ups (post-dashboard)
 
 - [ ] PDP Reviews: list + submit wired to reviews API.
-- [ ] Referral capture on landing/PLP/PDP via middleware; add `trackClick()` fallback.
+- [x] Referral capture on landing/PLP/PDP via middleware; add `trackClick()` fallback.
 - [ ] Wishlist PDP/PLP heart: ensure toggle and cache invalidation are stable (address flakiness noted in `UNRESOLVED_ISSUES.md`).
 - [ ] Checkout/payments prep: Stripe test mode integration path, order status updates, and admin status mutation audits.
 
