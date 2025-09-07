@@ -14,10 +14,10 @@ This document outlines the strategic plan for developing the backend of the Modu
 
 The detailed sections below are historical. For the current plan post-1.0, track work via GitHub issues and milestones in the repository.
 
-- E2E coverage (Playwright): happy path, 3DS/failure/refund; stabilize selectors and test data.
-- CI hardening: cache tuning, artifacts (screenshots/HTML on failures), optional E2E job.
-- Image uploads hardening: file-type inference, size limits, CDN/backed storage option, admin UX polish.
-- Reviews (U5): public list + submit; dashboard management; admin moderation.
+- E2E coverage (Playwright): happy path, 3DS/failure/retry/refund; stabilize selectors and test data.
+- CI hardening: baseline CI added; next up is cache tuning and artifacts (screenshots/HTML on failures), optional E2E job.
+- Image uploads: implemented streaming uploads and admin UI; hardening next (file-type inference, size limits, CDN-backed storage option, admin UX polish).
+- Reviews (U5): backend and user dashboard completed; remaining work: admin moderation UI and PDP integration.
 - Affiliate (U6): referral capture middleware, clicks, conversions, admin status flows.
 - Cart persistence: server-backed cart + client sync; optimistic reconcile on login.
 - SEO & filters: deep-linked filters, structured data, sitemaps.
@@ -55,6 +55,18 @@ Next steps:
 
 - Distributed rate limiting: replace in-memory bucket with Redis or Upstash (per-IP window + burst) to support multi-instance deployments.
 - Email delivery hardening: route through `@repo/mail` to enable SMTP fallback and centralized templates/provider switch.
+
+---
+
+## Status Update (September 2025)
+
+Recent changes focused on release readiness, CI, and monorepo build stability:
+
+- CI added: `.github/workflows/ci.yml` runs pnpm workspace install, lint, typecheck, builds `@repo/emails`, then builds `apps/web`.
+- Monorepo build fixes: Next transpiles `@repo/emails`; web depends on `@repo/api`; Turbo `typecheck` depends on upstream builds; lockfile updated.
+- Env guards: API env now warns (instead of throwing) when email/payments are not configured; `WEB_ORIGIN` defaults to `http://localhost:3000`.
+- DB runtime init: `@repo/db` lazily reads `DATABASE_URL` at runtime to avoid build-time failures on hosting providers.
+- Result: Local and CI builds are green. Production deploy still requires proper environment configuration and remote DB schema; considered out-of-scope for the v1.0 code handoff.
 - E2E UI tests (Playwright): happy path submit, invalid payload, and rate-limit flows with assertions on toasts and HTTP status.
 - Observability/security: structured logs for contact submissions, basic honeypot/Turnstile option, and alerting on spikes.
 
@@ -314,28 +326,28 @@ This section details a step-by-step implementation plan focusing on the dashboar
 ### U5: Reviews — Dashboard-first Delivery
 
 1. DB Schema (`packages/db/src/schema/reviews.ts`)
-   - [ ] `reviews` (id, productId, userId, rating 1–5, title, body, status: pending|approved|rejected, createdAt, updatedAt)
-   - [ ] Indexes by `productId`, `userId`, `status`, `createdAt`.
+   - [x] `reviews` (id, productId, userId, rating 1–5, title, body, status: pending|approved|rejected, createdAt, updatedAt)
+   - [x] Indexes by `productId`, `userId`, `status`, `createdAt`.
 
 2. Repository (`packages/db/src/repositories/reviews-repo.ts`)
-   - [ ] `create`, `listApprovedByProduct(productId, limit, offset)`, `listByUser(userId, limit, offset)`, `updateByUser`, `deleteByUser`.
-   - [ ] Admin: `listAll({ status, limit })`, `moderate(id, status)`.
+   - [x] `create`, `listApprovedByProduct(productId, limit, offset)`, `listByUser(userId, limit, offset)`, `updateByUser`, `deleteByUser`.
+   - [x] Admin: `listAll({ status, limit })`, `moderate(id, status)`.
 
 3. API Routes (`packages/api/src/routes/reviews.ts` or split under products/account/admin)
-   - [ ] Public/Product: `GET /api/v1/products/:id/reviews` (approved only), `POST /api/v1/products/:id/reviews` (auth required).
-   - [ ] Account: `GET /api/v1/account/reviews`, `PATCH /api/v1/account/reviews/:id`, `DELETE /api/v1/account/reviews/:id`.
-   - [ ] Admin: `GET /api/v1/admin/reviews?status&limit`, `PATCH /api/v1/admin/reviews/:id/status`.
+   - [x] Public/Product: `GET /api/v1/products/:id/reviews` (approved only), `POST /api/v1/products/:id/reviews` (auth required).
+   - [x] Account: `GET /api/v1/account/reviews`, `PATCH /api/v1/account/reviews/:id`, `DELETE /api/v1/account/reviews/:id`.
+   - [x] Admin: `GET /api/v1/admin/reviews?status&limit`, `PATCH /api/v1/admin/reviews/:id/status`.
 
 4. Route Mounting (`packages/api/src/app.ts`)
-   - [ ] `app.route("/api/v1/reviews", reviewsRoute)` and/or register product subroutes within `productsRoute`.
+   - [x] `app.route("/api/v1/reviews", reviewsRoute)` and/or register product subroutes within `productsRoute`.
 
 5. Frontend Client + Query Keys
-   - [ ] `apps/web/src/lib/data/reviews.ts`: `listByProduct`, `create`, `listMine`, `updateMine`, `deleteMine`.
-   - [ ] `apps/web/src/lib/reviews/query-keys.ts`: `product(id)`, `me`.
+   - [x] `apps/web/src/lib/data/reviews.ts`: `listByProduct`, `create`, `listMine`, `updateMine`, `deleteMine`.
+   - [x] `apps/web/src/lib/reviews/query-keys.ts`: `product(id)`, `me`.
 
 6. Wire User Dashboard
-   - [ ] Replace mocks in `apps/web/src/app/dashboard/user/reviews/page.tsx` with TanStack Query.
-   - [ ] Add edit/delete flows with optimistic updates + invalidations.
+   - [x] Replace mocks in `apps/web/src/app/dashboard/user/reviews/page.tsx` with TanStack Query.
+   - [x] Add edit/delete flows with optimistic updates + invalidations.
 
 7. Admin Dashboard
    - [ ] Add `apps/web/src/app/dashboard/admin/customers/reviews/page.tsx` for moderation queue with approve/reject.

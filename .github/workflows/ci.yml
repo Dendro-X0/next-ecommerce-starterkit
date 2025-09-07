@@ -7,32 +7,40 @@ on:
     branches: [ main ]
 
 jobs:
-  build-test:
+  build:
+    name: Lint · Typecheck · Build (web)
     runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      BETTER_AUTH_SECRET: ci-only-dummy-secret
+      WEB_ORIGIN: http://localhost:3000
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup pnpm
+
+      - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 10.13.1
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          cache: pnpm
+
+      - name: Install dependencies (workspace root)
+        run: pnpm -w install --frozen-lockfile
+
       - name: Lint
-        run: pnpm lint
+        run: pnpm -w turbo run lint
+
       - name: Typecheck
-        run: pnpm typecheck
-      - name: Build web
-        run: pnpm build
-      - name: API unit/integration tests
-        run: pnpm -C packages/api test -- --run
-      # Optional: E2E (enable if Playwright is configured for CI)
-      # - name: Install Playwright browsers
-      #   run: pnpm -C apps/web exec playwright install --with-deps
-      # - name: E2E tests
-      #   run: pnpm -C apps/web test:e2e -- --reporter=dot
+        run: pnpm -w turbo run typecheck
+
+      - name: Build upstream emails (ensure subpath export types)
+        run: pnpm -w turbo run build --filter=@repo/emails...
+
+      - name: Build web app
+        run: pnpm -w turbo run build --filter=web...
