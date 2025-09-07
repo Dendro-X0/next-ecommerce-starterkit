@@ -2,7 +2,14 @@ import path from "path"
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@repo/ui", "@repo/auth", "@repo/db", "@repo/api", "@repo/mail"],
+  transpilePackages: [
+    "@repo/ui",
+    "@repo/auth",
+    "@repo/db",
+    "@repo/api",
+    "@repo/mail",
+    "@repo/emails",
+  ],
   images: {
     remotePatterns: [{ protocol: "https", hostname: "picsum.photos" }],
   },

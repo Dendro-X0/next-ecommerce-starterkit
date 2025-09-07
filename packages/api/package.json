@@ -7,6 +7,7 @@
   "types": "src/index.ts",
   "license": "MIT",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
