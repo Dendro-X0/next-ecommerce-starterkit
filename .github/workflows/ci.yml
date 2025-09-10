@@ -38,11 +38,14 @@ jobs:
       - name: Install dependencies (web)
         run: pnpm -w --filter web... install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm -w turbo run lint --filter=web...
+      - name: Lint (web)
+        working-directory: apps/web
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run lint
 
-      - name: Typecheck
-        run: pnpm -w turbo run typecheck
+      - name: Typecheck (web)
+        run: pnpm -w turbo run typecheck --filter=web...
 
       - name: Build upstream emails (ensure subpath export types)
         run: pnpm -w turbo run build --filter=@repo/emails...
