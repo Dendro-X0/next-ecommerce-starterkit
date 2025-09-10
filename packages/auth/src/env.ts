@@ -27,9 +27,10 @@ export const authEnv = (() => {
     BETTER_AUTH_SECRET: z.preprocess(
       (v) => {
         const s = typeof v === "string" ? v.trim() : undefined
-        // Always provide a safe dummy to allow build/preview/CI to proceed when not configured.
-        // Production deployments MUST set a real secret in their environment.
-        if (!s) return "ci-only-dummy-secret"
+        const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build"
+        const isCI = process.env.CI === "true"
+        // Allow a dummy only for CI/preview builds so Next can bundle routes.
+        if (!s && (isCI || isBuildPhase)) return "ci-only-dummy-secret"
         return v
       },
       z.string().min(1, "BETTER_AUTH_SECRET is required"),
@@ -77,6 +78,17 @@ export const authEnv = (() => {
   if (!parsed.success) {
     const message = parsed.error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join("; ")
     throw new Error(`Invalid auth environment variables: ${message}`)
+  }
+  // Hard guard: never allow the dummy secret in production runtime.
+  if (
+    process.env.NODE_ENV === "production" &&
+    parsed.data.BETTER_AUTH_SECRET === "ci-only-dummy-secret" &&
+    process.env.CI !== "true" &&
+    process.env.NEXT_PHASE !== "phase-production-build"
+  ) {
+    throw new Error(
+      "Invalid auth environment variables: BETTER_AUTH_SECRET must be set in production.",
+    )
   }
   return parsed.data
 })()

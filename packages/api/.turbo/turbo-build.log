@@ -1,0 +1,4 @@
+
+> @repo/api@0.1.0 build E:\Codebase\ecommerce-workspace\next-ecommerce-starterkit\packages\api
+> tsc -p tsconfig.json
+
