@@ -34,7 +34,7 @@ import { type AdminAffiliateConversion, adminApi } from "@/lib/data/admin-api"
 import { showToast } from "@/lib/utils/toast"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { CheckCircle2, DollarSign, Search } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../../modules/shared/components/app-link"
 import type { JSX } from "react"
 import { useEffect, useMemo, useState } from "react"
 
@@ -273,9 +273,9 @@ export default function Page(): JSX.Element {
                   <TableCell>{new Date(cv.createdAt).toLocaleString()}</TableCell>
                   <TableCell className="font-medium">{cv.code}</TableCell>
                   <TableCell>
-                    <Link className="underline" href={`/dashboard/admin/orders/${cv.orderId}`}>
+                    <AppLink className="underline" href={`/dashboard/admin/orders/${cv.orderId}`}>
                       {cv.orderId}
-                    </Link>
+                    </AppLink>
                   </TableCell>
                   <TableCell className="font-medium">{formatUsd(cv.commissionCents)}</TableCell>
                   <TableCell>

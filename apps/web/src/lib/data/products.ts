@@ -49,6 +49,29 @@ export type ListProductsResponse = Readonly<{
 
 const API_BASE: string = "/api/v1"
 
+// Safe-mode flags: when enabled, avoid all network requests and return static data.
+const DISABLE_DATA_FETCH: boolean =
+  (process.env.NEXT_PUBLIC_DISABLE_DATA_FETCH ?? "false").toLowerCase() === "true"
+const DISABLE_PRODUCTS: boolean =
+  DISABLE_DATA_FETCH || (process.env.NEXT_PUBLIC_DISABLE_PRODUCTS ?? "false").toLowerCase() === "true"
+
+function localProductsList(params: ListProductsParams = {}): ListProductsResponse {
+  const pageSize: number = Math.max(1, Math.min(100, params.pageSize ?? 12))
+  const page: number = Math.max(1, params.page ?? 1)
+  const category = params.category?.toLowerCase()
+  let items = [...localProducts]
+  if (category) {
+    items = items.filter((p) => p.category?.toLowerCase() === category)
+  }
+  // Very light client-side sort for demo; defaults to input order
+  if (params.sort === "price_asc") items.sort((a, b) => a.price - b.price)
+  if (params.sort === "price_desc") items.sort((a, b) => b.price - a.price)
+  const total = items.length
+  const start = (page - 1) * pageSize
+  const slice = items.slice(start, start + pageSize)
+  return { items: slice, total, page, pageSize }
+}
+
 async function asJson<T>(res: Response): Promise<T> {
   const ct: string | null = res.headers.get("content-type")
   const isJson: boolean = !!ct && ct.includes("application/json")
@@ -120,6 +143,9 @@ function mapServerToProduct(dto: ServerProductDto): Product {
 
 export const productsApi = {
   list: async (params: ListProductsParams = {}): Promise<ListProductsResponse> => {
+    if (DISABLE_PRODUCTS) {
+      return Promise.resolve(localProductsList(params))
+    }
     const usp = new URLSearchParams()
     if (params.query) usp.set("query", params.query)
     if (params.category) usp.set("category", params.category)
@@ -139,6 +165,10 @@ export const productsApi = {
     }
   },
   featured: async (limit = 8): Promise<Readonly<{ items: readonly Product[] }>> => {
+    if (DISABLE_PRODUCTS) {
+      const n: number = Math.max(1, Math.min(50, limit))
+      return Promise.resolve({ items: localProducts.slice(0, n) } as const)
+    }
     const usp = new URLSearchParams()
     if (typeof limit === "number" && Number.isFinite(limit)) usp.set("limit", String(limit))
     const res: Response = await fetch(`${API_BASE}/products/featured?${usp.toString()}`, {
@@ -149,6 +179,10 @@ export const productsApi = {
     return { items: (json.items ?? []).map(mapServerToProduct) } as const
   },
   bySlug: async (slug: string): Promise<Product> => {
+    if (DISABLE_PRODUCTS) {
+      const local = localProducts.find((p) => p.slug === slug) ?? localProducts[0]
+      return Promise.resolve(local)
+    }
     const res: Response = await fetch(`${API_BASE}/products/${encodeURIComponent(slug)}`, {
       credentials: "include",
     })
@@ -156,6 +190,10 @@ export const productsApi = {
     return mapServerToProduct(dto)
   },
   byId: async (id: string): Promise<Product> => {
+    if (DISABLE_PRODUCTS) {
+      const local = localProducts.find((p) => p.id === id) ?? localProducts[0]
+      return Promise.resolve(local)
+    }
     const res: Response = await fetch(`${API_BASE}/products/id/${encodeURIComponent(id)}`, {
       credentials: "include",
     })

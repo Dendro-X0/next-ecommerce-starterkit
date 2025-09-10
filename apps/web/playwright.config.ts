@@ -19,7 +19,7 @@ const config: PlaywrightTestConfig = {
     url: BASE_URL,
     reuseExistingServer: true,
     timeout: 120_000,
-    env: { PORT: String(PORT) },
+    env: { PORT: String(PORT), WEB_ORIGIN: BASE_URL, BETTER_AUTH_SECRET: "playwright-dev-secret" },
   },
   reporter: process.env.CI
     ? [["html", { outputFolder: "./playwright-report", open: "never" }], ["list"]]

@@ -9,6 +9,8 @@ import { Slider } from "@/components/ui/slider"
 import type { FilterOptions } from "@/types"
 import { useEffect, useState } from "react"
 import type { JSX } from "react"
+import { uiTemplates } from "@/lib/safe-mode"
+import { categories as mockCategories } from "@/lib/data"
 
 type CategoryItem = Readonly<{
   id: string
@@ -38,6 +40,20 @@ export function ProductFilters({ filters, onFiltersChange }: ProductFiltersProps
   useEffect(() => {
     let mounted = true
     const load = async (): Promise<void> => {
+      if (uiTemplates) {
+        // Use local mock categories in UI-only mode to avoid network calls
+        const local: readonly CategoryItem[] = mockCategories.map((c) => ({
+          id: c.id,
+          slug: c.slug,
+          name: c.name,
+          productCount: c.productCount,
+        }))
+        if (mounted) {
+          setCategories(local)
+          setLoading(false)
+        }
+        return
+      }
       try {
         setLoading(true)
         setError(undefined)

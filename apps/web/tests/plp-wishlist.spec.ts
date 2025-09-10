@@ -8,10 +8,21 @@ import { expect, test } from "@playwright/test"
  * - Toggle back to restore original state
  */
 test("plp wishlist toggle on first product card", async ({ page }): Promise<void> => {
-  // Use deterministic seeded category (from DB seed script)
-  await page.goto("/categories/apparel")
+  // Navigate to Shop page which lists products across categories
+  await page.goto("/shop")
+  await page.waitForLoadState("networkidle")
 
-  const firstCard = page.getByTestId("product-card").first()
+  let firstCard = page.getByTestId("product-card").first()
+  // Wait for element to attach to DOM (more resilient than immediate visibility)
+  try {
+    await firstCard.waitFor({ state: "attached", timeout: 15000 })
+  } catch {
+    // Fallback: try a deterministic category page
+    await page.goto("/categories/apparel")
+    await page.waitForLoadState("networkidle")
+    firstCard = page.getByTestId("product-card").first()
+    await firstCard.waitFor({ state: "attached", timeout: 15000 })
+  }
   await expect(firstCard).toBeVisible({ timeout: 60000 })
 
   const container = firstCard.getByTestId("plp-wishlist-toggle")

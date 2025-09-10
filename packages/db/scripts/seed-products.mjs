@@ -49,95 +49,99 @@ async function main() {
       id: "c-apparel",
       slug: "apparel",
       name: "Apparel",
-      imageUrl: "https://picsum.photos/seed/cat1/640/360",
+      imageUrl: "/categories/apparel.jpg",
     },
     {
       id: "c-footwear",
       slug: "footwear",
       name: "Footwear",
-      imageUrl: "https://picsum.photos/seed/cat2/640/360",
+      imageUrl: "/categories/footwear.jpg",
     },
     {
       id: "c-electronics",
       slug: "electronics",
       name: "Electronics",
-      imageUrl: "https://picsum.photos/seed/cat3/640/360",
+      imageUrl: "/categories/electronics.jpg",
     },
     {
       id: "c-home",
       slug: "home",
       name: "Home",
-      imageUrl: "https://picsum.photos/seed/cat4/640/360",
+      imageUrl: "/categories/home.jpg",
     },
     {
       id: "c-stationery",
       slug: "stationery",
       name: "Stationery",
-      imageUrl: "https://picsum.photos/seed/cat5/640/360",
+      imageUrl: "/categories/stationery.jpg",
     },
     {
       id: "c-grocery",
       slug: "grocery",
       name: "Grocery",
-      imageUrl: "https://picsum.photos/seed/cat6/640/360",
+      imageUrl: "/categories/grocery.jpg",
     },
     {
       id: "c-outdoors",
       slug: "outdoors",
       name: "Outdoors",
-      imageUrl: "https://picsum.photos/seed/cat7/640/360",
+      imageUrl: "/categories/outdoors.jpg",
     },
     {
       id: "c-fitness",
       slug: "fitness",
       name: "Fitness",
-      imageUrl: "https://picsum.photos/seed/cat8/640/360",
+      imageUrl: "/categories/fitness.jpg",
     },
     // Digital product categories
     {
       id: "c-ebooks",
       slug: "e-books",
       name: "E‑Books",
-      imageUrl: "https://picsum.photos/seed/cat-ebooks/640/360",
+      imageUrl: "/categories/ebooks.jpg",
     },
     {
-      id: "c-codebases",
-      slug: "codebases",
-      name: "Boilerplate Codebases",
-      imageUrl: "https://picsum.photos/seed/cat-codebases/640/360",
+      id: "c-software",
+      slug: "software",
+      name: "Software",
+      imageUrl: "/categories/software.jpg",
     },
     {
       id: "c-audio",
       slug: "audio",
       name: "Audio",
-      imageUrl: "https://picsum.photos/seed/cat-audio/640/360",
+      imageUrl: "/categories/audio.jpg",
     },
     {
       id: "c-images",
       slug: "images",
       name: "Images",
-      imageUrl: "https://picsum.photos/seed/cat-images/640/360",
+      imageUrl: "/categories/images.jpg",
     },
     {
       id: "c-other",
       slug: "other",
       name: "Other",
-      imageUrl: "https://picsum.photos/seed/cat-other/640/360",
+      imageUrl: "/categories/other.jpg",
     },
   ]
+
+  // Migrate legacy slug before upsert to avoid unique conflicts
+  // 1) Retarget products that referenced the old slug
+  await sql`update products set category_slug = 'software' where category_slug = 'codebases'`;
+  // 2) Drop the legacy category row so upsert for 'software' is unambiguous
+  await sql`delete from categories where slug = 'codebases'`;
 
   // Upsert categories (ensures new categories are added even if table already has data)
   let insertedCats = 0
   for (const c of categories) {
-    const res = await sql`
+    await sql`
       insert into categories (id, slug, name, image_url)
       values (${c.id}, ${c.slug}, ${c.name}, ${c.imageUrl})
-      on conflict (slug) do nothing
+      on conflict (slug) do update set
+        name = excluded.name,
+        image_url = excluded.image_url
     `
-    // Neon returns empty array; we can't easily detect inserted count reliably here.
-    // Track approximate count by a second query for that slug (cheap enough for small list).
-    const check = await sql`select 1 from categories where slug = ${c.slug} limit 1`
-    if (check?.length === 1) insertedCats += 0 // exists now; ignore exact diff
   }
   console.log(`[seed] Ensured ${categories.length} categories exist (idempotent upsert).`)
 

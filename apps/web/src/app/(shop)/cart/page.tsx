@@ -6,7 +6,7 @@ import { MobileCheckoutBar } from "@/components/cart/mobile-checkout-bar"
 import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/lib/stores/cart"
 import { ShoppingBag } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../modules/shared/components/app-link"
 
 export default function CartPage() {
   const { items } = useCartStore()
@@ -23,7 +23,7 @@ export default function CartPage() {
             </p>
           </div>
           <Button asChild size="lg">
-            <Link href="/shop">Continue Shopping</Link>
+            <AppLink href="/shop">Continue Shopping</AppLink>
           </Button>
         </div>
       </div>
@@ -49,7 +49,7 @@ export default function CartPage() {
 
           <div className="mt-6">
             <Button variant="outline" asChild className="w-full sm:w-auto">
-              <Link href="/shop">Continue Shopping</Link>
+              <AppLink href="/shop">Continue Shopping</AppLink>
             </Button>
           </div>
         </div>

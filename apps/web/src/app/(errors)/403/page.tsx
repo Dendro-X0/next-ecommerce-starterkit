@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { AppLink } from "../../../../modules/shared/components/app-link"
 import type React from "react"
 
 /**
@@ -11,9 +11,9 @@ export default function NotAuthorizedPage(): React.ReactElement {
       <h1 className="text-3xl font-semibold">403 – Not authorized</h1>
       <p className="mt-4 text-muted-foreground">You do not have access to view this page.</p>
       <div className="mt-6">
-        <Link href="/" className="underline">
+        <AppLink href="/" className="underline">
           Go back home
-        </Link>
+        </AppLink>
       </div>
     </main>
   )

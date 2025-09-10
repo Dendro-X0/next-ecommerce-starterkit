@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/lib/stores/cart"
-import Link from "next/link"
+import { AppLink } from "../../../shared/components/app-link"
 import type { JSX } from "react"
 
 /**
@@ -25,9 +25,9 @@ export function MobileCheckoutBar(): JSX.Element | null {
             <p className="text-lg font-semibold">${total.toFixed(2)}</p>
           </div>
           <Button asChild size="lg" className="flex-1">
-            <Link href="/checkout" aria-label="Proceed to checkout">
+            <AppLink href="/checkout" aria-label="Proceed to checkout">
               Proceed to Checkout
-            </Link>
+            </AppLink>
           </Button>
         </div>
       </div>

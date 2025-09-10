@@ -1,7 +1,7 @@
 "use client"
 
 import { Folder, Forward, type LucideIcon, MoreHorizontal, Trash2 } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import type React from "react"
 
 import {
@@ -48,10 +48,10 @@ export function NavProjects({
         {enabled.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <Link href={item.url}>
+              <AppLink href={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
-              </Link>
+              </AppLink>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

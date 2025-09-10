@@ -12,6 +12,23 @@
   - Check `DATABASE_URL` in `apps/web/.env.local`
   - Run `pnpm db:generate` then `pnpm db:migrate`
 
+## Dev-mode stalls/freezes
+- See the full guide: `./dev-mode-limitations.md`.
+- Quick flags for a quiet baseline (put in `apps/web/.env.local`):
+  ```bash
+  NEXT_PUBLIC_DISABLE_TOASTER=true
+  NEXT_PUBLIC_DISABLE_CART_HYDRATOR=true
+  NEXT_PUBLIC_DISABLE_AFFILIATE_TRACKER=true
+  NEXT_PUBLIC_DISABLE_HEADER_INTERACTIONS=false
+  NEXT_PUBLIC_USE_UI_TEMPLATES=false
+  NEXT_PUBLIC_USE_UI_TEMPLATES_SHOP=false
+  ```
+- Verify production is smooth (dev-only overhead does not apply):
+  ```bash
+  pnpm --filter web build
+  pnpm --filter web start
+  ```
+
 ## Local Dev Environment (cookies)
 - For HTTP `localhost`, ensure cookies are accepted by disabling cross-site cookie mode:
   - `ENABLE_CROSS_SITE_COOKIES=false`

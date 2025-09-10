@@ -26,7 +26,7 @@ import { ADMIN_ORDERS_QK } from "@/lib/admin/orders/query-keys"
 import { type AdminOrder, adminApi } from "@/lib/data/admin-api"
 import { useQuery } from "@tanstack/react-query"
 import { Download, Eye, Package, Search } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import type { JSX } from "react"
 import { useMemo, useState } from "react"
 
@@ -155,9 +155,9 @@ export default function AdminOrdersPage(): JSX.Element {
                     </TableCell>
                     <TableCell className="text-right">
                       <Button asChild size="sm" variant="ghost">
-                        <Link href={`/dashboard/admin/orders/${order.id}`}>
+                        <AppLink href={`/dashboard/admin/orders/${order.id}`}>
                           <Eye className="h-4 w-4" />
-                        </Link>
+                        </AppLink>
                       </Button>
                     </TableCell>
                   </TableRow>

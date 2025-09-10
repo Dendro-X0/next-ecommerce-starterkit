@@ -13,8 +13,8 @@ import type { Product } from "@/types"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Heart, Plus, Share2, ShoppingCart, Trash2 } from "lucide-react"
 import { useMemo } from "react"
-import Image from "next/image"
-import Link from "next/link"
+import { SafeImage } from "@/components/ui/safe-image"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 
 export default function WishlistPage() {
   const queryClient = useQueryClient()
@@ -141,7 +141,7 @@ export default function WishlistPage() {
                   {wishlist.items.map((item) => (
                     <div key={item.id} className="border rounded-lg p-4 space-y-3">
                       <div className="relative w-full h-32 rounded overflow-hidden">
-                        <Image
+                        <SafeImage
                           src={(item.image || "/placeholder.svg") + "?height=128&width=256"}
                           alt={item.name}
                           fill
@@ -198,7 +198,7 @@ export default function WishlistPage() {
                   <Heart className="mx-auto h-12 w-12 mb-4 opacity-50" />
                   <p>This wishlist is empty</p>
                   <Button variant="outline" size="sm" className="mt-2 bg-transparent" asChild>
-                    <Link href="/">Start Shopping</Link>
+                    <AppLink href="/">Start Shopping</AppLink>
                   </Button>
                 </div>
               )}

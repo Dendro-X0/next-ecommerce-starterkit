@@ -2,7 +2,7 @@
 
 import { authClient } from "@/lib/auth-client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
+import { AppLink } from "@/modules/shared/components/app-link"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import type { ReactElement } from "react"
@@ -165,13 +165,13 @@ export function SignUpForm() {
                   <div className="space-y-1 leading-none">
                     <FormLabel>
                       I agree to the{" "}
-                      <Link href="/terms" className="text-primary hover:underline">
+                      <AppLink href="/terms" className="text-primary hover:underline">
                         Terms of Service
-                      </Link>{" "}
+                      </AppLink>{" "}
                       and{" "}
-                      <Link href="/privacy" className="text-primary hover:underline">
+                      <AppLink href="/privacy" className="text-primary hover:underline">
                         Privacy Policy
-                      </Link>
+                      </AppLink>
                     </FormLabel>
                   </div>
                 </FormItem>
@@ -186,9 +186,9 @@ export function SignUpForm() {
       <CardFooter>
         <p className="text-center text-sm text-muted-foreground w-full">
           Already have an account?{" "}
-          <Link href="/auth/login" className="text-primary hover:underline">
+          <AppLink href="/auth/login" className="text-primary hover:underline">
             Sign in
-          </Link>
+          </AppLink>
         </p>
       </CardFooter>
     </Card>

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { links } from "@/lib/links"
 import { ArrowRight, Gift, Heart } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import type React from "react"
 
 /**
@@ -24,28 +24,28 @@ export function QuickActions(): React.ReactElement {
       </CardHeader>
       <CardContent className="space-y-3">
         <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
-          <Link href={links.getDashboardUserOrdersRoute()} aria-label="Track Orders">
+          <AppLink href={links.getDashboardUserOrdersRoute()} aria-label="Track Orders">
             <ArrowRight className="mr-2 h-4 w-4" />
             Track Orders
-          </Link>
+          </AppLink>
         </Button>
         <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
-          <Link href={links.getDashboardUserWishlistRoute()} aria-label="View Wishlist">
+          <AppLink href={links.getDashboardUserWishlistRoute()} aria-label="View Wishlist">
             <Heart className="mr-2 h-4 w-4" />
             View Wishlist
-          </Link>
+          </AppLink>
         </Button>
         <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
-          <Link href={links.getDashboardUserLoyaltyRoute()} aria-label="Redeem Points">
+          <AppLink href={links.getDashboardUserLoyaltyRoute()} aria-label="Redeem Points">
             <Gift className="mr-2 h-4 w-4" />
             Redeem Points
-          </Link>
+          </AppLink>
         </Button>
         <Button variant="outline" className="w-full justify-start bg-transparent" asChild>
-          <Link href={links.getShopHomeRoute()} aria-label="Continue Shopping">
+          <AppLink href={links.getShopHomeRoute()} aria-label="Continue Shopping">
             <ArrowRight className="mr-2 h-4 w-4" />
             Continue Shopping
-          </Link>
+          </AppLink>
         </Button>
       </CardContent>
     </Card>

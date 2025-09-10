@@ -72,6 +72,18 @@ export function SessionProvider({ children }: { readonly children: React.ReactNo
   return <SessionContext.Provider value={{ session }}>{children}</SessionContext.Provider>
 }
 
+/**
+ * SessionProviderStatic: lightweight provider that supplies a fixed session value
+ * without React Query. Useful for minimal boot mode where we avoid heavy
+ * providers but components still call useSession().
+ */
+export function SessionProviderStatic({
+  children,
+  session = { user: null },
+}: Readonly<{ children: React.ReactNode; session?: Session }>): JSX.Element {
+  return <SessionContext.Provider value={{ session }}>{children}</SessionContext.Provider>
+}
+
 export function AppWithQueryClient({
   children,
 }: { readonly children: React.ReactNode }): JSX.Element {
@@ -88,4 +100,19 @@ export function useSession(): Session | undefined {
     throw new Error("useSession must be used within a SessionProvider")
   }
   return context.session
+}
+
+/**
+ * AppWithStaticSession
+ * A client component wrapper that mounts QueryClientProvider and SessionProviderStatic.
+ * Safe to render from a Server Component without passing class instances in props.
+ */
+export function AppWithStaticSession({
+  children,
+}: Readonly<{ children: React.ReactNode }>): JSX.Element {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SessionProviderStatic session={{ user: null }}>{children}</SessionProviderStatic>
+    </QueryClientProvider>
+  )
 }

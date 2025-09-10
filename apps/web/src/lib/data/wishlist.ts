@@ -51,5 +51,17 @@ async function has(productId: string): Promise<boolean> {
   return data.has
 }
 
-export const wishlistApi = { getWishlist, add, remove, toggle, has } as const
+async function hasBulk(productIds: readonly string[]): Promise<Readonly<Record<string, boolean>>> {
+  const res = await fetch(`${base}/has/bulk`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ productIds }),
+  })
+  if (!res.ok) throw new Error(`Failed to query wishlist bulk (${res.status})`)
+  const data = (await res.json()) as Readonly<Record<string, boolean>>
+  return data
+}
+
+export const wishlistApi = { getWishlist, add, remove, toggle, has, hasBulk } as const
 export type WishlistApi = typeof wishlistApi

@@ -6,6 +6,7 @@ import { Check, ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { animate, motion, useMotionValue } from "motion/react"
 import type { JSX } from "react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { animationsDisabled } from "@/lib/safe-mode"
 
 type Testimonial = {
   readonly id: number
@@ -63,7 +64,31 @@ const clamp = (value: number, min: number, max: number): number => {
  * CustomerTestimonials renders a responsive carousel (1 slide on mobile, 3 on desktop)
  * with mouse/finger dragging and animated transitions using Framer Motion.
  */
+function useIdleOrFirstInteraction(timeoutMs: number = 1500): boolean {
+  const [ready, setReady] = useState<boolean>(false)
+  useEffect(() => {
+    if (ready) return
+    const onAny = (): void => setReady(true)
+    const idler = (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback
+      ? (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(() => setReady(true), { timeout: timeoutMs })
+      : window.setTimeout(() => setReady(true), timeoutMs)
+    window.addEventListener("pointerdown", onAny, { once: true, passive: true })
+    window.addEventListener("keydown", onAny, { once: true })
+    return () => {
+      window.removeEventListener("pointerdown", onAny)
+      window.removeEventListener("keydown", onAny)
+      const w = window as unknown as { cancelIdleCallback?: (id: number) => void }
+      if (w.cancelIdleCallback) w.cancelIdleCallback(idler as unknown as number)
+      else window.clearTimeout(idler as unknown as number)
+    }
+  }, [ready, timeoutMs])
+  return ready
+}
+
 export function CustomerTestimonials(): JSX.Element {
+  const ready: boolean = useIdleOrFirstInteraction(1500)
+  const enabled: boolean = !animationsDisabled || ready
+  // Hooks MUST be called unconditionally and in the same order each render
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [slidesPerView, setSlidesPerView] = useState<number>(1)
   const [containerWidth, setContainerWidth] = useState<number>(0)
@@ -89,10 +114,11 @@ export function CustomerTestimonials(): JSX.Element {
   }, [])
 
   useEffect(() => {
+    if (!enabled) return
     updateLayout()
     window.addEventListener("resize", updateLayout)
     return () => window.removeEventListener("resize", updateLayout)
-  }, [updateLayout])
+  }, [enabled, updateLayout])
 
   // Keep index in range when slidesPerView changes responsively
   useEffect(() => {
@@ -100,9 +126,10 @@ export function CustomerTestimonials(): JSX.Element {
   }, [maxIndex])
 
   useEffect(() => {
+    if (!enabled) return
     const target = -index * slideWidth
     animate(x, target, { type: "spring", bounce: 0, duration: 0.45 })
-  }, [index, slideWidth, x])
+  }, [enabled, index, slideWidth, x])
 
   const next = useCallback((): void => {
     setIndex((prev) => clamp(prev + 1, 0, maxIndex))
@@ -136,6 +163,48 @@ export function CustomerTestimonials(): JSX.Element {
   const stars: readonly number[] = useMemo<number[]>(() => {
     return [0, 1, 2, 3, 4]
   }, [])
+
+  if (!enabled) {
+    return (
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="section-title text-black dark:text-white">OUR HAPPY CUSTOMERS</h2>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {testimonials.map((t) => (
+              <Card key={t.id} className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-1 mb-4">
+                    {stars.map((s) => (
+                      <Star
+                        key={`star-${t.id}-${s}`}
+                        className={
+                          s < t.rating
+                            ? "h-5 w-5 fill-yellow-400 text-yellow-400"
+                            : "h-5 w-5 text-gray-300 dark:text-gray-600"
+                        }
+                      />
+                    ))}
+                  </div>
+                  <div className="flex items-start gap-2 mb-4">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">{t.name}</h4>
+                    {t.verified && (
+                      <div className="flex items-center gap-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs">
+                        <Check className="h-3 w-3" />
+                        <span>Verified</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">"{t.comment}"</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-16 bg-white dark:bg-gray-900">

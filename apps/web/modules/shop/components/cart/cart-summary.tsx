@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useCartStore } from "@/lib/stores/cart"
-import Link from "next/link"
+import { AppLink } from "../../../shared/components/app-link"
 
 export function CartSummary() {
   const { subtotal, shipping, tax, total, items } = useCartStore()
@@ -40,7 +40,7 @@ export function CartSummary() {
         </div>
 
         <Button asChild className="w-full" size="lg">
-          <Link href="/checkout">Proceed to Checkout</Link>
+          <AppLink href="/checkout">Proceed to Checkout</AppLink>
         </Button>
 
         {shipping > 0 && (

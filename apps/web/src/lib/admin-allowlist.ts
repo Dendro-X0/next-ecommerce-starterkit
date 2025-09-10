@@ -5,7 +5,10 @@
  */
 
 export function isAdminEmail(email: string | null | undefined): boolean {
-  const raw: string | undefined = process.env.NEXT_PUBLIC_ADMIN_EMAILS
+  // Prefer NEXT_PUBLIC_ADMIN_EMAILS for client-side gating; fall back to ADMIN_EMAILS
+  // so local/dev setups that used the older name still work.
+  const raw: string | undefined =
+    process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? process.env.ADMIN_EMAILS
   if (!raw || !email) return false
   const target: string = String(email).trim().toLowerCase()
   const set: ReadonlySet<string> = new Set(

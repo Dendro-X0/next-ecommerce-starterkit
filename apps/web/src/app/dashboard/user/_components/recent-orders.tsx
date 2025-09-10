@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table"
 import type { UserOrder } from "@/types/user"
 import { Eye, Package, Truck } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 
 interface RecentOrdersProps {
   orders: UserOrder[]
@@ -56,7 +56,7 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
             <CardDescription>Your latest order history and tracking information</CardDescription>
           </div>
           <Button variant="outline" size="sm" className="w-full md:w-auto" asChild>
-            <Link href="/dashboard/orders">View All Orders</Link>
+            <AppLink href="/dashboard/orders">View All Orders</AppLink>
           </Button>
         </div>
       </CardHeader>

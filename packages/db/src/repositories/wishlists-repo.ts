@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto"
-import { and, desc, eq, isNull } from "drizzle-orm"
+import { and, desc, eq, inArray, isNull } from "drizzle-orm"
 import { db } from "../db"
 import { products } from "../schema/products"
 import { wishlistItems, wishlists } from "../schema/wishlists"
@@ -174,5 +174,21 @@ async function hasItem(
   return exists.length > 0
 }
 
-const repo = { getOrCreate, list, addItem, removeItem, toggleItem, hasItem } as const
+async function hasItemsBulk(
+  owner: Readonly<{ userId: string | null; guestId: string | null }>,
+  productIds: readonly string[],
+): Promise<Readonly<Record<string, boolean>>> {
+  if (!productIds.length) return {}
+  const w = await getOrCreate(owner)
+  const rows = await db
+    .select({ productId: wishlistItems.productId })
+    .from(wishlistItems)
+    .where(and(eq(wishlistItems.wishlistId, w.id), inArray(wishlistItems.productId, productIds as string[])))
+  const set = new Set(rows.map((r) => r.productId))
+  const result: Record<string, boolean> = {}
+  for (const id of productIds) result[id] = set.has(id)
+  return result
+}
+
+const repo = { getOrCreate, list, addItem, removeItem, toggleItem, hasItem, hasItemsBulk } as const
 export default repo

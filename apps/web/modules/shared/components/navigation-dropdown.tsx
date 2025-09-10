@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronDown } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "./app-link"
 import { useEffect, useRef, useState } from "react"
 import type { JSX } from "react"
 
@@ -44,12 +44,12 @@ export function NavigationDropdown({ title, href }: NavigationDropdownProps): JS
 
   if (title !== "Categories") {
     return (
-      <Link
+      <AppLink
         href={href || "#"}
         className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-all duration-200"
       >
         {title}
-      </Link>
+      </AppLink>
     )
   }
 
@@ -110,7 +110,7 @@ export function NavigationDropdown({ title, href }: NavigationDropdownProps): JS
           <div className="p-6">
             <div className="grid grid-cols-2 gap-4">
               {shopCategories.map((category) => (
-                <Link
+                <AppLink
                   key={category.name}
                   href={category.href}
                   className="group flex flex-col items-center p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
@@ -128,7 +128,7 @@ export function NavigationDropdown({ title, href }: NavigationDropdownProps): JS
                   <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
                     {category.description}
                   </p>
-                </Link>
+                </AppLink>
               ))}
             </div>
           </div>

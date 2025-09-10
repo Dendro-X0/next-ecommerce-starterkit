@@ -3,7 +3,7 @@
 import { authClient } from "@/lib/auth-client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft, Mail } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "@/modules/shared/components/app-link"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import type { ReactElement } from "react"
@@ -134,12 +134,12 @@ export default function VerifyEmailPage(): ReactElement {
           </Form>
         </CardContent>
         <CardFooter>
-          <Link href="/auth/login" className="w-full">
+          <AppLink href="/auth/login" className="w-full">
             <Button variant="ghost" className="w-full">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to login
             </Button>
-          </Link>
+          </AppLink>
         </CardFooter>
       </Card>
     </div>

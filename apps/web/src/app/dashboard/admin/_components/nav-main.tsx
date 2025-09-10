@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronRight, type LucideIcon } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import type React from "react"
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@components/ui/collapsible"
@@ -62,9 +62,9 @@ export function NavMain({
                     {subItems.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
-                          <Link href={subItem.url}>
+                          <AppLink href={subItem.url}>
                             <span>{subItem.title}</span>
-                          </Link>
+                          </AppLink>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

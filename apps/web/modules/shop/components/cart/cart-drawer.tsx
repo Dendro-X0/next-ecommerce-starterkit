@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { useCartStore } from "@/lib/stores/cart"
 import { cn } from "@/lib/utils"
 import { ShoppingCart } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../shared/components/app-link"
 import { useMemo } from "react"
 import type React from "react"
 import { CartItem } from "./cart-item"
@@ -66,7 +66,7 @@ export function CartDrawer({ label, fullWidth = false, className }: CartDrawerPr
               <ShoppingCart className="h-8 w-8 text-muted-foreground" />
               <div className="text-sm text-muted-foreground">Your cart is empty.</div>
               <Button asChild>
-                <Link href="/shop">Continue shopping</Link>
+                <AppLink href="/shop">Continue shopping</AppLink>
               </Button>
             </div>
           ) : (
@@ -80,10 +80,10 @@ export function CartDrawer({ label, fullWidth = false, className }: CartDrawerPr
                 <CartSummary />
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Button asChild variant="outline" className="w-full sm:w-auto flex-1">
-                    <Link href="/cart">View cart</Link>
+                    <AppLink href="/cart">View cart</AppLink>
                   </Button>
                   <Button asChild className="w-full sm:w-auto flex-1">
-                    <Link href="/checkout">Checkout</Link>
+                    <AppLink href="/checkout">Checkout</AppLink>
                   </Button>
                 </div>
               </div>

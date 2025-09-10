@@ -4,7 +4,7 @@ import { authClient } from "@/lib/auth-client"
 import { showToast } from "@/lib/utils/toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "@/modules/shared/components/app-link"
 import { useEffect, useState } from "react"
 import type { ReactElement } from "react"
 import { useForm } from "react-hook-form"
@@ -87,12 +87,12 @@ export function ForgotPasswordForm() {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <Link href="/auth/login" className="w-full">
+          <AppLink href="/auth/login" className="w-full">
             <Button variant="outline" className="w-full bg-transparent">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to login
             </Button>
-          </Link>
+          </AppLink>
         </CardFooter>
       </Card>
     )
@@ -127,12 +127,12 @@ export function ForgotPasswordForm() {
         </Form>
       </CardContent>
       <CardFooter>
-        <Link href="/auth/login" className="w-full">
+        <AppLink href="/auth/login" className="w-full">
           <Button variant="outline" className="w-full bg-transparent">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to login
           </Button>
-        </Link>
+        </AppLink>
       </CardFooter>
     </Card>
   )

@@ -1,4 +1,4 @@
-import { createWriteStream, existsSync } from "fs"
+import { createWriteStream } from "fs"
 import { Readable } from "node:stream"
 import { pipeline } from "node:stream/promises"
 import type { ReadableStream as WebReadableStream } from "node:stream/web"
@@ -57,9 +57,8 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const uploadsDir: string = path.join(process.cwd(), "public", "uploads")
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true })
-    }
+    // mkdir with { recursive: true } is idempotent; no need for a sync exists check
+    await mkdir(uploadsDir, { recursive: true })
 
     const safeBase: string = (file.name || "upload")
       .toLowerCase()

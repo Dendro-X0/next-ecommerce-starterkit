@@ -1,0 +1,70 @@
+"use client"
+
+import dynamic from "next/dynamic"
+import type { JSX } from "react"
+import { useEffect, useState } from "react"
+import { AppLink } from "./app-link"
+
+export type HeaderNavItem = Readonly<{
+  title: string
+  href: string
+  hasDropdown?: boolean
+}>
+
+const NavigationDropdown = dynamic(async () => (await import("./navigation-dropdown")).NavigationDropdown, {
+  ssr: false,
+  loading: () => null,
+})
+
+function useEnableOnFirstInteraction(): boolean {
+  const [enabled, setEnabled] = useState<boolean>(false)
+  useEffect(() => {
+    if (enabled) return
+    const onAny = (): void => setEnabled(true)
+    const idler = (window as any).requestIdleCallback
+      ? (window as any).requestIdleCallback(() => setEnabled(true), { timeout: 7000 })
+      : window.setTimeout(() => setEnabled(true), 7000)
+    window.addEventListener("pointerdown", onAny, { once: true, passive: true })
+    window.addEventListener("keydown", onAny, { once: true })
+    window.addEventListener("touchstart", onAny, { once: true, passive: true })
+    window.addEventListener("focusin", onAny, { once: true })
+    return () => {
+      window.removeEventListener("pointerdown", onAny)
+      window.removeEventListener("keydown", onAny)
+      window.removeEventListener("touchstart", onAny)
+      window.removeEventListener("focusin", onAny)
+      if ((window as any).cancelIdleCallback) {
+        try { (window as any).cancelIdleCallback(idler) } catch { /* no-op */ }
+      } else {
+        window.clearTimeout(idler as number)
+      }
+    }
+  }, [enabled])
+  return enabled
+}
+
+export function HeaderNavIsland({ navigationItems }: { readonly navigationItems: readonly HeaderNavItem[] }): JSX.Element {
+  const enabled: boolean = useEnableOnFirstInteraction()
+  const disableDropdown: boolean = (process.env.NEXT_PUBLIC_DISABLE_NAV_DROPDOWN ?? "false").toLowerCase() === "true"
+
+  return (
+    <>
+      <nav className="hidden md:flex items-center space-x-1">
+        {navigationItems.map((item) => (
+          <div key={item.title}>
+            {item.hasDropdown && enabled && !disableDropdown ? (
+              <NavigationDropdown title={item.title} href={item.href} />
+            ) : (
+              <AppLink
+                href={item.href}
+                className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-all duration-200"
+              >
+                {item.title}
+              </AppLink>
+            )}
+          </div>
+        ))}
+      </nav>
+    </>
+  )
+}

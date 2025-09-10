@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { mockOrders } from "@/lib/data/mock"
-import Link from "next/link"
+import { AppLink } from "@/modules/shared/components/app-link"
 
 const statusColors = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -43,7 +43,7 @@ export function OrderHistory() {
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/account/orders/${order.id}`}>View Details</Link>
+                    <AppLink href={`/account/orders/${order.id}`}>View Details</AppLink>
                   </Button>
                   {order.status === "delivered" && (
                     <Button variant="outline" size="sm">

@@ -8,7 +8,7 @@ import { ordersApi } from "@/lib/data/orders"
 import { ORDER_BY_ID_QK } from "@/lib/orders/query-keys"
 import type { Order } from "@/types/order"
 import { useQuery } from "@tanstack/react-query"
-import Link from "next/link"
+import { AppLink } from "../../../../../../modules/shared/components/app-link"
 import { useParams } from "next/navigation"
 import type { JSX } from "react"
 
@@ -40,9 +40,9 @@ export default function UserOrderDetailPage(): JSX.Element {
               <CardTitle>Order not found</CardTitle>
             </CardHeader>
             <CardContent>
-              <Link href="/dashboard/user/orders" className="text-primary hover:underline">
+              <AppLink href="/dashboard/user/orders" className="text-primary hover:underline">
                 Back to Orders
-              </Link>
+              </AppLink>
             </CardContent>
           </Card>
         ) : (
@@ -114,9 +114,9 @@ export default function UserOrderDetailPage(): JSX.Element {
               </div>
 
               <div className="pt-4">
-                <Link href="/dashboard/user/orders" className="text-primary hover:underline">
+                <AppLink href="/dashboard/user/orders" className="text-primary hover:underline">
                   Back to Orders
-                </Link>
+                </AppLink>
               </div>
             </CardContent>
           </Card>

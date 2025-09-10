@@ -10,7 +10,7 @@ import type { Order } from "@/types/order"
 import type { User, UserOrder, UserStats, Wishlist } from "@/types/user"
 import { useQuery } from "@tanstack/react-query"
 import { Heart } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../modules/shared/components/app-link"
 import dynamic from "next/dynamic"
 import type { ReactElement } from "react"
 import { useMemo } from "react"
@@ -19,7 +19,27 @@ import { DashboardHeader } from "./_components/dashboard-header"
 import { MembershipCard } from "./_components/membership-card"
 import { QuickActions } from "./_components/quick-actions"
 import { RecentOrders } from "./_components/recent-orders"
-import { SpendingCharts } from "./_components/spending-charts"
+const SpendingCharts = dynamic(
+  () => import("./_components/spending-charts").then((m) => m.SpendingCharts),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="grid gap-6 md:grid-cols-2">
+        {[0, 1].map((i) => (
+          <Card key={i}>
+            <CardHeader>
+              <div className="h-5 w-40 bg-muted rounded animate-pulse" />
+              <div className="mt-2 h-4 w-56 bg-muted rounded animate-pulse" />
+            </CardHeader>
+            <CardContent>
+              <div className="h-[360px] w-full bg-muted rounded animate-pulse" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    ),
+  }
+)
 import { UserStatsCards } from "./_components/user-stats"
 import { WishlistPreview } from "./_components/wishlist-preview"
 
@@ -341,7 +361,7 @@ export default function UserDashboardPage(): ReactElement {
               </CardHeader>
               <CardContent>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={links.getShopHomeRoute()}>Start Shopping</Link>
+                  <AppLink href={links.getShopHomeRoute()}>Start Shopping</AppLink>
                 </Button>
               </CardContent>
             </Card>
@@ -390,7 +410,7 @@ export default function UserDashboardPage(): ReactElement {
                   <Heart className="mx-auto h-12 w-12 mb-4 opacity-50" />
                   <p>Your wishlist is empty</p>
                   <Button variant="outline" size="sm" className="mt-2 bg-transparent" asChild>
-                    <Link href={links.getShopHomeRoute()}>Start Shopping</Link>
+                    <AppLink href={links.getShopHomeRoute()}>Start Shopping</AppLink>
                   </Button>
                 </div>
               </CardContent>

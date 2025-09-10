@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { links } from "@/lib/links"
 import type { Wishlist } from "@/types/user"
 import { Heart } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
+import { SafeImage } from "@/components/ui/safe-image"
 import type React from "react"
 
 interface WishlistPreviewProps {
@@ -38,7 +38,7 @@ export function WishlistPreview({
             <CardDescription>Items you&apos;re interested in</CardDescription>
           </div>
           <Button variant="outline" size="sm" asChild>
-            <Link href={links.getDashboardUserWishlistRoute()}>View All</Link>
+            <AppLink href={links.getDashboardUserWishlistRoute()}>View All</AppLink>
           </Button>
         </div>
       </CardHeader>
@@ -47,7 +47,7 @@ export function WishlistPreview({
           {wishlist?.items.slice(0, maxItems).map((item) => (
             <div key={item.id} className="flex items-center gap-3">
               <div className="relative w-12 h-12 rounded-lg overflow-hidden">
-                <Image
+                <SafeImage
                   src={(item.image || "/placeholder.svg") + "?height=48&width=48"}
                   alt={item.name}
                   fill
@@ -70,7 +70,7 @@ export function WishlistPreview({
               <Heart className="mx-auto h-12 w-12 mb-4 opacity-50" />
               <p>Your wishlist is empty</p>
               <Button variant="outline" size="sm" className="mt-2 bg-transparent" asChild>
-                <Link href={links.getShopHomeRoute()}>Start Shopping</Link>
+                <AppLink href={links.getShopHomeRoute()}>Start Shopping</AppLink>
               </Button>
             </div>
           )}

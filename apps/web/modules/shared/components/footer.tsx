@@ -1,7 +1,5 @@
-"use client"
-
 import { Facebook, Github, Instagram, Twitter } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "./app-link"
 
 const footerSections = [
   {
@@ -58,38 +56,38 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
           {/* Brand Section */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-6">
+            <AppLink href="/" className="inline-block mb-6">
               <span className="text-2xl font-black text-black dark:text-white">SHOP.CO</span>
-            </Link>
+            </AppLink>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm">
               We have clothes that suits your style and which you&apos;re proud to wear. From women to
               men.
             </p>
             <div className="flex gap-4">
-              <Link
+              <AppLink
                 href="#"
                 className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
               >
                 <Twitter className="h-5 w-5" />
-              </Link>
-              <Link
+              </AppLink>
+              <AppLink
                 href="#"
                 className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
               >
                 <Facebook className="h-5 w-5" />
-              </Link>
-              <Link
+              </AppLink>
+              <AppLink
                 href="#"
                 className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
               >
                 <Instagram className="h-5 w-5" />
-              </Link>
-              <Link
+              </AppLink>
+              <AppLink
                 href="#"
                 className="w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
               >
                 <Github className="h-5 w-5" />
-              </Link>
+              </AppLink>
             </div>
           </div>
 
@@ -102,12 +100,12 @@ export function Footer() {
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <Link
+                    <AppLink
                       href={link.href}
                       className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors text-sm"
                     >
                       {link.name}
-                    </Link>
+                    </AppLink>
                   </li>
                 ))}
               </ul>

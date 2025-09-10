@@ -1,85 +1,15 @@
-"use client"
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { categoriesApi } from "@/lib/data/categories"
-import type { Category } from "@/types"
-import { useQuery } from "@tanstack/react-query"
-import Link from "next/link"
-import { useMemo } from "react"
 import type { JSX } from "react"
-import Image from "next/image"
+import { productsDisabled } from "@/lib/safe-mode"
 
-/**
- * Categories index page: lists all categories from the backend.
- */
-export default function CategoriesPage(): JSX.Element {
-  const { data, isLoading, error } = useQuery<{ items: readonly Category[] }>({
-    queryKey: ["categories"],
-    queryFn: () => categoriesApi.list(),
-    staleTime: 5 * 60_000,
-  })
-
-  const items: readonly Category[] = data?.items ?? []
-
-  // Stable keys for loading skeletons (10 placeholders)
-  const skeletonKeys: readonly string[] = useMemo(
-    () =>
-      Array.from(
-        { length: 10 },
-        () => globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2),
-      ),
-    [],
-  )
-
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
+export default async function CategoriesPage(): Promise<JSX.Element> {
+  if (productsDisabled) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center text-muted-foreground">
         <h1 className="text-3xl font-bold mb-2">Categories</h1>
-        {error && <p className="text-sm text-destructive">Failed to load categories.</p>}
-        {!error && (
-          <p className="text-muted-foreground">Browse categories and discover products.</p>
-        )}
+        <p>Category listings are disabled in safe mode.</p>
       </div>
-
-      {isLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {skeletonKeys.map((k) => (
-            <div key={k} className="space-y-3">
-              <div className="aspect-square rounded-lg overflow-hidden">
-                <Skeleton className="h-full w-full" />
-              </div>
-              <Skeleton className="h-5 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {items.map((c) => (
-            <Link key={c.id} href={`/categories/${c.slug}`} className="group">
-              <Card className="h-full overflow-hidden">
-                <CardHeader className="p-0">
-                  <div className="aspect-square w-full overflow-hidden relative">
-                    <Image
-                      src={(c.image || "/placeholder.svg") + "?height=300&width=300"}
-                      alt={c.name}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      className="object-cover transition-transform duration-200 group-hover:scale-105"
-                      priority={false}
-                    />
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <CardTitle className="text-base">{c.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground">{c.productCount} products</p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  )
+    )
+  }
+  const { default: CategoriesPageClient } = await import("./client")
+  return <CategoriesPageClient />
 }

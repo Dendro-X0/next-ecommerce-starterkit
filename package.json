@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "pnpm --filter web dev",
+    "dev:safe": "cross-env NEXT_PUBLIC_SAFE_HOME=true pnpm --filter web dev",
     "build": "pnpm --filter web build",
     "start": "pnpm --filter web start",
     "lint": "turbo run lint",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "cross-env": "^10.0.0",
     "prettier": "^3.6.2",
     "turbo": "^2.5.5",
     "vitest": "^3.2.4"

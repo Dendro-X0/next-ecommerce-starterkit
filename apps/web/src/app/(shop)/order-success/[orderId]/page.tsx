@@ -8,7 +8,7 @@ import { ORDER_BY_ID_QK } from "@/lib/orders/query-keys"
 import type { Order } from "@/types/order"
 import { useQuery } from "@tanstack/react-query"
 import { CheckCircle, Download, Truck } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 
 interface OrderSuccessPageProps {
   params: {
@@ -95,7 +95,7 @@ export default function OrderSuccessPage({ params }: OrderSuccessPageProps) {
             Track Order
           </Button>
           <Button asChild>
-            <Link href="/shop">Continue Shopping</Link>
+            <AppLink href="/shop">Continue Shopping</AppLink>
           </Button>
         </div>
 
@@ -104,9 +104,9 @@ export default function OrderSuccessPage({ params }: OrderSuccessPageProps) {
           {data.email ? <p>A confirmation email has been sent to {data.email}</p> : null}
           <p>
             You can track your order status in your{" "}
-            <Link href="/account" className="text-primary hover:underline">
+            <AppLink href="/account" className="text-primary hover:underline">
               account dashboard
-            </Link>
+            </AppLink>
           </p>
         </div>
       </div>

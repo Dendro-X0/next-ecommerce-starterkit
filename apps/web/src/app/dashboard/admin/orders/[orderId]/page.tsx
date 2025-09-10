@@ -15,7 +15,7 @@ import { SidebarInset } from "@/components/ui/sidebar"
 import { ADMIN_ORDERS_QK, ADMIN_ORDER_BY_ID_QK } from "@/lib/admin/orders/query-keys"
 import { type AdminOrder, adminApi } from "@/lib/data/admin-api"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import Link from "next/link"
+import { AppLink } from "../../../../../../modules/shared/components/app-link"
 import { useParams } from "next/navigation"
 import type { JSX } from "react"
 
@@ -64,9 +64,9 @@ export default function AdminOrderDetailPage(): JSX.Element {
               <CardTitle>Order not found</CardTitle>
             </CardHeader>
             <CardContent>
-              <Link href="/dashboard/admin/orders" className="text-primary hover:underline">
+              <AppLink href="/dashboard/admin/orders" className="text-primary hover:underline">
                 Back to Orders
-              </Link>
+              </AppLink>
             </CardContent>
           </Card>
         ) : (
@@ -159,9 +159,9 @@ export default function AdminOrderDetailPage(): JSX.Element {
               </div>
 
               <div className="pt-4">
-                <Link href="/dashboard/admin/orders" className="text-primary hover:underline">
+                <AppLink href="/dashboard/admin/orders" className="text-primary hover:underline">
                   Back to Orders
-                </Link>
+                </AppLink>
               </div>
             </CardContent>
           </Card>

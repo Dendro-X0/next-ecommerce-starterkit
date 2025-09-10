@@ -8,8 +8,8 @@ import { productsApi } from "@/lib/data/products"
 import { showToast } from "@/lib/utils/toast"
 import type { Product } from "@/types"
 import { useQuery } from "@tanstack/react-query"
-import Link from "next/link"
-import Image from "next/image"
+import { AppLink } from "../../shared/components/app-link"
+import { SafeImage } from "@/components/ui/safe-image"
 import { useEffect, useMemo } from "react"
 
 export function FeaturedProducts() {
@@ -27,13 +27,9 @@ export function FeaturedProducts() {
     }
   }, [error])
 
-  // Stable keys for skeleton items
+  // Stable, deterministic keys to prevent SSR/CSR hydration mismatch
   const skeletonKeys = useMemo<readonly string[]>(
-    () =>
-      Array.from(
-        { length: 4 },
-        () => globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2),
-      ),
+    () => Array.from({ length: 4 }, (_v, i) => `featured-skel-${i}`),
     [],
   )
 
@@ -70,10 +66,10 @@ export function FeaturedProducts() {
             {items.map((product) => (
               <Card key={product.id} className="group border-0 shadow-none bg-transparent">
                 <CardContent className="p-0">
-                  <Link href={`/products/${product.slug}`}>
+                  <AppLink href={`/products/${product.slug}`}>
                     <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden mb-4">
                       <div className="relative w-full h-full">
-                        <Image
+                        <SafeImage
                           src={product.images?.[0] || "/placeholder.svg"}
                           alt={product.name}
                           fill
@@ -108,7 +104,7 @@ export function FeaturedProducts() {
                         )}
                       </div>
                     </div>
-                  </Link>
+                  </AppLink>
                 </CardContent>
               </Card>
             ))}
@@ -121,7 +117,7 @@ export function FeaturedProducts() {
             asChild
             className="border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 bg-transparent"
           >
-            <Link href="/shop">View All</Link>
+            <AppLink href="/shop">View All</AppLink>
           </Button>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { authClient } from "@/lib/auth-client"
 import { showToast } from "@/lib/utils/toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
-import Link from "next/link"
+import { AppLink } from "@/modules/shared/components/app-link"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -188,9 +188,9 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
+              <AppLink href="/auth/forgot-password" className="text-sm text-primary hover:underline">
                 Forgot password?
-              </Link>
+              </AppLink>
             </div>
             <SubmitButton loading={form.formState.isSubmitting} />
           </form>
@@ -201,9 +201,9 @@ export function LoginForm() {
       <CardFooter>
         <p className="text-center text-sm text-muted-foreground w-full">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className="text-primary hover:underline">
+          <AppLink href="/auth/signup" className="text-primary hover:underline">
             Sign up
-          </Link>
+          </AppLink>
         </p>
       </CardFooter>
     </Card>

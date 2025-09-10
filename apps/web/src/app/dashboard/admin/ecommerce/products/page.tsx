@@ -3,7 +3,7 @@ import { Section } from "@/app/dashboard/_components/section"
 import { ProductsTable } from "@/app/dashboard/admin/_components/products-table"
 import { Button } from "@/components/ui/button"
 import { links } from "@/lib/links"
-import Link from "next/link"
+import { AppLink } from "../../../../../../modules/shared/components/app-link"
 import type React from "react"
 
 /**
@@ -16,9 +16,9 @@ export default function ProductsPage(): React.ReactElement {
         title="Products"
         description="Manage your catalog. Create, edit, and organize products."
         actions={
-          <Link href={links.getDashboardAdminEcommerceProductCreateRoute()}>
+          <AppLink href={links.getDashboardAdminEcommerceProductCreateRoute()}>
             <Button>Create Product</Button>
-          </Link>
+          </AppLink>
         }
       />
       <ProductsTable />

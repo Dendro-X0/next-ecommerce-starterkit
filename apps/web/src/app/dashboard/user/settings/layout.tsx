@@ -3,7 +3,7 @@
 import { DashboardHeader } from "@/app/dashboard/user/_components/dashboard-header"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import { usePathname } from "next/navigation"
 
 export default function SettingsLayout({
@@ -30,7 +30,7 @@ export default function SettingsLayout({
           <TabsList>
             {tabs.map((tab) => (
               <TabsTrigger key={tab.name} value={tab.name} asChild>
-                <Link href={tab.href}>{tab.name}</Link>
+                <AppLink href={tab.href}>{tab.name}</AppLink>
               </TabsTrigger>
             ))}
           </TabsList>

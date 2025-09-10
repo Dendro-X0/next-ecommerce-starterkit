@@ -5,7 +5,7 @@ import { StarRating } from "@/components/ui/star-rating"
 import { products } from "@/lib/data"
 import { Heart, ShoppingCart } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
+import { AppLink } from "../../../shared/components/app-link"
 
 interface RelatedProductsProps {
   currentProductId: string
@@ -31,11 +31,11 @@ export function RelatedProducts({ currentProductId, category, limit = 4 }: Relat
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <h2 className="text-2xl font-bold">Related Products</h2>
         <Button variant="outline" asChild className="w-full sm:w-auto">
-          <Link
+          <AppLink
             href={category ? `/categories/${category.toLowerCase().replace(/\s+/g, "-")}` : "/shop"}
           >
             View All
-          </Link>
+          </AppLink>
         </Button>
       </div>
 
@@ -46,14 +46,14 @@ export function RelatedProducts({ currentProductId, category, limit = 4 }: Relat
             className="group overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="relative aspect-square overflow-hidden">
-              <Link href={`/products/${product.slug}`}>
+              <AppLink href={`/products/${product.slug}`}>
                 <Image
                   src={product.images[0] || "/placeholder.svg"}
                   alt={product.name}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
                 />
-              </Link>
+              </AppLink>
 
               {/* Badges */}
               <div className="absolute top-2 left-2 flex flex-col gap-1">
@@ -86,11 +86,11 @@ export function RelatedProducts({ currentProductId, category, limit = 4 }: Relat
                   {product.category}
                 </Badge>
 
-                <Link href={`/products/${product.slug}`}>
+                <AppLink href={`/products/${product.slug}`}>
                   <h3 className="font-semibold line-clamp-2 hover:text-primary transition-colors">
                     {product.name}
                   </h3>
-                </Link>
+                </AppLink>
 
                 <div className="flex items-center gap-2">
                   <StarRating rating={product.rating} size="sm" />

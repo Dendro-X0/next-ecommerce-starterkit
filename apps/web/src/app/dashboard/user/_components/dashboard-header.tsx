@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { FaShoppingCart } from "react-icons/fa"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import { useSession } from "@/hooks/use-session"
 import { type Role, hasRole } from "@/lib/roles"
 import { isAdminEmail } from "@/lib/admin-allowlist"
@@ -66,14 +66,14 @@ export function DashboardHeader({ title, breadcrumbs }: DashboardHeaderProps) {
       <div className="flex items-center gap-2 px-4">
         {isAdmin && (
           <Button variant="secondary" size="sm" asChild>
-            <Link href="/dashboard/admin">Admin</Link>
+            <AppLink href="/dashboard/admin">Admin</AppLink>
           </Button>
         )}
         <Button variant="outline" size="sm" asChild>
-          <Link href="/" aria-label="Shop Now">
+          <AppLink href="/" aria-label="Shop Now">
             <FaShoppingCart className="mr-2 h-4 w-4" />
             Shop Now
-          </Link>
+          </AppLink>
         </Button>
         <ThemeToggle />
       </div>

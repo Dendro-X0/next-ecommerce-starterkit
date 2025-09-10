@@ -26,7 +26,7 @@ import { links } from "@/lib/links"
 import type { Product } from "@/types"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Filter, MoreHorizontal, Plus, Search } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import NextImage from "next/image"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
@@ -96,10 +96,10 @@ export function ProductsTable(): React.ReactElement {
             <CardDescription>Manage your product inventory and pricing.</CardDescription>
           </div>
           <Button asChild>
-            <Link href={links.getDashboardAdminEcommerceProductCreateRoute()}>
+            <AppLink href={links.getDashboardAdminEcommerceProductCreateRoute()}>
               <Plus className="mr-2 h-4 w-4" />
               Add Product
-            </Link>
+            </AppLink>
           </Button>
         </div>
         <div className="flex items-center space-x-2">
@@ -162,9 +162,9 @@ export function ProductsTable(): React.ReactElement {
                 </Button>
               ) : (
                 <Button asChild>
-                  <Link href={links.getDashboardAdminEcommerceProductCreateRoute()}>
+                  <AppLink href={links.getDashboardAdminEcommerceProductCreateRoute()}>
                     Add Product
-                  </Link>
+                  </AppLink>
                 </Button>
               )
             }

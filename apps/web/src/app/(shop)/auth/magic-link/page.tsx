@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { authClient } from "@/lib/auth-client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
+import { AppLink } from "@/modules/shared/components/app-link"
 import { useState } from "react"
 import type { ReactElement } from "react"
 import { useForm } from "react-hook-form"
@@ -82,9 +82,9 @@ export default function MagicLinkPage(): ReactElement {
           </form>
         </Form>
         <div className="text-center">
-          <Link href="/auth/login" className="text-sm text-primary hover:underline">
+          <AppLink href="/auth/login" className="text-sm text-primary hover:underline">
             Back to sign in
-          </Link>
+          </AppLink>
         </div>
       </AuthCard>
     </div>

@@ -399,20 +399,17 @@ export function ProductForm({ productId }: ProductFormProps): React.ReactElement
                 disabled={isSubmitting || createMutation.isPending || updateMutation.isPending}
                 onUploadingChange={(u: boolean) => setIsUploadingMedia(u)}
                 onUploaded={({ url, kind }) => {
-                  // Backward-compat single upload
                   if (kind === "image")
                     setValue("imageUrl", url, { shouldDirty: true, shouldValidate: true })
                   setGallery((prev) => {
                     const next = [...prev, { url, kind }]
                     return next.filter(
-                      (m, i, arr) =>
-                        arr.findIndex((x) => x.url === m.url && x.kind === m.kind) === i,
+                      (m, i, arr) => arr.findIndex((x) => x.url === m.url && x.kind === m.kind) === i,
                     )
                   })
                   if (kind === "video") setVideoPreviewUrl(url)
                 }}
                 onUploadedMany={(results) => {
-                  // Prefer first image as primary imageUrl if empty
                   const firstImage = results.find((r) => r.kind === "image")
                   if (!imageUrlValue && firstImage)
                     setValue("imageUrl", firstImage.url, {
@@ -422,8 +419,7 @@ export function ProductForm({ productId }: ProductFormProps): React.ReactElement
                   setGallery((prev) => {
                     const next = [...prev, ...results]
                     return next.filter(
-                      (m, i, arr) =>
-                        arr.findIndex((x) => x.url === m.url && x.kind === m.kind) === i,
+                      (m, i, arr) => arr.findIndex((x) => x.url === m.url && x.kind === m.kind) === i,
                     )
                   })
                   const firstVideo = results.find((r) => r.kind === "video")
@@ -520,7 +516,7 @@ export function ProductForm({ productId }: ProductFormProps): React.ReactElement
                 <Input
                   id="categoryInput"
                   list="category-suggestions"
-                  placeholder="e.g., E‑Books, Codebases, Other"
+                  placeholder="e.g., E‑Books, Software, Other"
                   value={categoryInput}
                   onChange={(e) => {
                     const nextText = e.target.value

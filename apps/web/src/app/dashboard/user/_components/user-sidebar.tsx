@@ -26,7 +26,7 @@ import {
   Star,
   User,
 } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import { useSession } from "@/hooks/use-session"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type React from "react"
@@ -76,7 +76,7 @@ export function UserSidebar(): React.ReactElement {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href={links.getDashboardUserHomeRoute()}>
+              <AppLink href={links.getDashboardUserHomeRoute()}>
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <ShoppingCart className="size-4" />
                 </div>
@@ -84,7 +84,7 @@ export function UserSidebar(): React.ReactElement {
                   <span className="truncate font-semibold">ModularShop</span>
                   <span className="truncate text-xs">My Account</span>
                 </div>
-              </Link>
+              </AppLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -96,10 +96,10 @@ export function UserSidebar(): React.ReactElement {
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild tooltip={item.title}>
-                  <Link href={item.url}>
+                  <AppLink href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
-                  </Link>
+                  </AppLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
@@ -114,10 +114,10 @@ export function UserSidebar(): React.ReactElement {
                   asChild
                   className={item.title === "Settings" ? "hidden md:flex" : undefined}
                 >
-                  <Link href={item.url}>
+                  <AppLink href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
-                  </Link>
+                  </AppLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
@@ -128,7 +128,7 @@ export function UserSidebar(): React.ReactElement {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href={links.getDashboardUserSettingsProfileRoute()}>
+              <AppLink href={links.getDashboardUserSettingsProfileRoute()}>
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={(u?.image as string | undefined) ?? undefined} alt={displayName} />
                   <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
@@ -137,7 +137,7 @@ export function UserSidebar(): React.ReactElement {
                   <span className="truncate font-semibold">{displayName}</span>
                   {displayEmail && <span className="truncate text-xs">{displayEmail}</span>}
                 </div>
-              </Link>
+              </AppLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

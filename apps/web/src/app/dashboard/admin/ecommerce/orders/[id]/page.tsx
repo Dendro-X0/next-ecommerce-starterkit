@@ -7,7 +7,7 @@ import { Badge } from "@components/ui/badge"
 import { Button } from "@components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@components/ui/table"
-import Link from "next/link"
+import { AppLink } from "../../../../../../../modules/shared/components/app-link"
 import type React from "react"
 import NextImage from "next/image"
 
@@ -50,9 +50,9 @@ export default function OrderDetailPage({
           title="Order not found"
           description="We couldn't find that order."
           actions={
-            <Link href={links.getDashboardAdminEcommerceOrdersRoute()}>
+            <AppLink href={links.getDashboardAdminEcommerceOrdersRoute()}>
               <Button variant="outline">Back to Orders</Button>
-            </Link>
+            </AppLink>
           }
         />
         <DashboardEmptyState
@@ -60,9 +60,9 @@ export default function OrderDetailPage({
           description="The requested order ID does not exist in the current dataset."
           variant="no-results"
           primaryAction={
-            <Link href={links.getDashboardAdminEcommerceOrdersRoute()}>
+            <AppLink href={links.getDashboardAdminEcommerceOrdersRoute()}>
               <Button variant="outline">Go to Orders</Button>
-            </Link>
+            </AppLink>
           }
         />
       </Section>
@@ -75,9 +75,9 @@ export default function OrderDetailPage({
         title={`Order ${order.id}`}
         description={`${order.items} item${order.items !== 1 ? "s" : ""} • Placed on ${order.date}`}
         actions={
-          <Link href={links.getDashboardAdminEcommerceOrdersRoute()}>
+          <AppLink href={links.getDashboardAdminEcommerceOrdersRoute()}>
             <Button variant="outline">Back to Orders</Button>
-          </Link>
+          </AppLink>
         }
       />
 

@@ -27,7 +27,7 @@ import type { Order } from "@/types/order"
 import type { OrderStatus } from "@/types/order"
 import { useQuery } from "@tanstack/react-query"
 import { Download, Eye, Package, Search } from "lucide-react"
-import Link from "next/link"
+import { AppLink } from "../../../../../modules/shared/components/app-link"
 import { type JSX, useMemo, useState } from "react"
 
 export default function OrdersPage() {
@@ -193,9 +193,9 @@ export default function OrdersPage() {
                     <TableCell className="font-medium">${order.total.toFixed(2)}</TableCell>
                     <TableCell className="text-right">
                       <Button asChild size="sm" variant="ghost">
-                        <Link href={`/dashboard/user/orders/${order.id}`}>
+                        <AppLink href={`/dashboard/user/orders/${order.id}`}>
                           <Eye className="h-4 w-4" />
-                        </Link>
+                        </AppLink>
                       </Button>
                     </TableCell>
                   </TableRow>

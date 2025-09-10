@@ -24,6 +24,7 @@ interface WishlistDto {
 
 const COOKIE = "orderUserId" as const // reuse guest id cookie used by orders
 const wishlistBodySchema = z.object({ productId: z.string().min(1) })
+const wishlistBulkSchema = z.object({ productIds: z.array(z.string().min(1)).max(100) })
 const productIdParamsSchema = z.object({ productId: z.string().min(1) })
 
 function getOrSetGuestId(c: Context): string {
@@ -72,6 +73,13 @@ const route = new Hono()
     const user = AdminGuard.getUser(c) as { id?: string | null } | null
     const has = await wishlistsRepo.hasItem({ userId: user?.id ?? null, guestId }, productId)
     return c.json({ has }, 200)
+  })
+  .post("/has/bulk", async (c) => {
+    const { productIds } = await validate.body(c, wishlistBulkSchema)
+    const guestId = getOrSetGuestId(c)
+    const user = AdminGuard.getUser(c) as { id?: string | null } | null
+    const map = await wishlistsRepo.hasItemsBulk({ userId: user?.id ?? null, guestId }, productIds)
+    return c.json(map, 200)
   })
 
 export default route
