@@ -1,3 +1,5 @@
+"use client"
+
 import { BrowseCategories } from "@/components/home/BrowseCategories"
 import { CustomerTestimonials } from "@/components/home/CustomerTestimonials"
 import { FeaturedProducts } from "@/components/home/FeaturedProducts"
