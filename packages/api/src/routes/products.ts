@@ -158,6 +158,8 @@ const productsRoute = new Hono()
         pageSize: q.pageSize,
         featured: q.featured,
       })
+      // Cache list responses briefly at the edge to reduce cold-start load
+      c.header("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300")
       const res: ProductListResponse = {
         items: result.items,
         total: result.total,
@@ -178,6 +180,7 @@ const productsRoute = new Hono()
     const { limit } = validate.query(c, featuredQuerySchema)
     try {
       const items = await productsRepo.listFeatured(limit)
+      c.header("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300")
       return c.json({ items }, 200)
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to list featured products"
@@ -195,6 +198,7 @@ const productsRoute = new Hono()
       if (!product) {
         return c.json({ error: "Product not found" }, 404)
       }
+      c.header("Cache-Control", "public, s-maxage=120, stale-while-revalidate=600")
       return c.json(product as ProductDTO, 200)
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to fetch product"
@@ -212,6 +216,7 @@ const productsRoute = new Hono()
       if (!product) {
         return c.json({ error: "Product not found" }, 404)
       }
+      c.header("Cache-Control", "public, s-maxage=120, stale-while-revalidate=600")
       return c.json(product as ProductDTO, 200)
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to fetch product"
