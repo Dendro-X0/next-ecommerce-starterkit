@@ -15,17 +15,11 @@ import { productsDisabled } from "@/lib/safe-mode"
  * Categories index page: lists all categories from the backend.
  */
 export default function CategoriesPageClient(): JSX.Element {
-  if (productsDisabled) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center text-muted-foreground">
-        <h1 className="text-3xl font-bold mb-2">Categories</h1>
-        <p>Category listings are disabled in safe mode.</p>
-      </div>
-    )
-  }
+  const isDisabled: boolean = productsDisabled
   const { data, isLoading, error } = useQuery<{ items: readonly Category[] }>({
     queryKey: ["categories"],
     queryFn: () => categoriesApi.list(),
+    enabled: !isDisabled,
     staleTime: 5 * 60_000,
   })
 
@@ -36,6 +30,15 @@ export default function CategoriesPageClient(): JSX.Element {
     () => Array.from({ length: 10 }, (_v, i) => `categories-skel-${i}`),
     [],
   )
+
+  if (isDisabled) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center text-muted-foreground">
+        <h1 className="text-3xl font-bold mb-2">Categories</h1>
+        <p>Category listings are disabled in safe mode.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

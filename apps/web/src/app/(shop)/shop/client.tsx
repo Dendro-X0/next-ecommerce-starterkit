@@ -29,6 +29,7 @@ import type { JSX } from "react"
  * sending heavy code in safe mode.
  */
 export default function ShopPageClient(): JSX.Element {
+  const isDisabled: boolean = productsDisabled
   // Fixed page size used across the view (also for skeletons)
   const productsPerPage: number = 12
   const skeletonKeys: readonly string[] = useMemo(
@@ -66,14 +67,6 @@ export default function ShopPageClient(): JSX.Element {
     [skeletonKeys],
   )
 
-  if (productsDisabled) {
-    return (
-      <div className="container mx-auto px-4 py-12 text-center text-muted-foreground">
-        <h1 className="text-3xl font-bold mb-2">Products Disabled</h1>
-        <p>Product listing is turned off in safe mode.</p>
-      </div>
-    )
-  }
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -121,6 +114,7 @@ export default function ShopPageClient(): JSX.Element {
       }),
     placeholderData: keepPreviousData,
     staleTime: 60_000,
+    enabled: !isDisabled,
   })
   const items = data?.items ?? []
 
@@ -169,6 +163,15 @@ export default function ShopPageClient(): JSX.Element {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i)
   }
   const pageWindow: readonly number[] = getPageWindow({ currentPage, totalPages, maxButtons: MAX_PAGINATION_BUTTONS })
+
+  if (isDisabled) {
+    return (
+      <div className="container mx-auto px-4 py-12 text-center text-muted-foreground">
+        <h1 className="text-3xl font-bold mb-2">Products Disabled</h1>
+        <p>Product listing is turned off in safe mode.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

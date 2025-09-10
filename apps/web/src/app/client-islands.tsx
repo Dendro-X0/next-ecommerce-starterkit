@@ -23,23 +23,29 @@ type ClientIslandsProps = Readonly<{
   enableToaster: boolean
 }>
 
+type WindowWithIdle = Window & {
+  readonly requestIdleCallback?: (cb: IdleRequestCallback, opts?: { readonly timeout?: number }) => number
+  readonly cancelIdleCallback?: (id: number) => void
+}
+
 function useIdleOrFirstInteraction(timeoutMs: number = 3000): boolean {
   const [ready, setReady] = useState<boolean>(false)
   useEffect(() => {
     if (ready) return
     const onAny = (): void => setReady(true)
-    const idler = (window as any).requestIdleCallback
-      ? (window as any).requestIdleCallback(() => setReady(true), { timeout: timeoutMs })
+    const w = window as WindowWithIdle
+    const idler: number = w.requestIdleCallback
+      ? w.requestIdleCallback(() => setReady(true), { timeout: timeoutMs })
       : window.setTimeout(() => setReady(true), timeoutMs)
     window.addEventListener("pointerdown", onAny, { once: true, passive: true })
     window.addEventListener("keydown", onAny, { once: true })
     return () => {
       window.removeEventListener("pointerdown", onAny)
       window.removeEventListener("keydown", onAny)
-      if ((window as any).cancelIdleCallback) {
-        try { (window as any).cancelIdleCallback(idler) } catch { /* no-op */ }
+      if (w.cancelIdleCallback) {
+        try { w.cancelIdleCallback(idler) } catch { /* no-op */ }
       } else {
-        window.clearTimeout(idler as number)
+        window.clearTimeout(idler)
       }
     }
   }, [ready, timeoutMs])

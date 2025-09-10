@@ -37,14 +37,7 @@ import { useSession } from "@/hooks/use-session"
  * Client PDP page (extracted from previous page.tsx).
  */
 export default function ProductPageClient(): ReactElement {
-  if (productsDisabled) {
-    return (
-      <div className="container mx-auto px-4 py-24 text-center">
-        <h1 className="text-2xl font-semibold">Products Disabled</h1>
-        <p className="text-muted-foreground mt-2">PDP is turned off in safe mode.</p>
-      </div>
-    )
-  }
+  const isDisabled: boolean = productsDisabled
   // Stable keys for loading thumbnail skeletons
   const skeletonThumbKeys = useMemo<readonly string[]>(
     () => Array.from({ length: 4 }, (_v, i) => `pdp-thumb-skel-${i}`),
@@ -63,7 +56,7 @@ export default function ProductPageClient(): ReactElement {
   } = useQuery<Product>({
     queryKey: ["product", slug],
     queryFn: () => productsApi.bySlug(slug),
-    enabled: isSlugReady,
+    enabled: isSlugReady && !isDisabled,
     retry: 0,
   })
 
@@ -94,7 +87,7 @@ export default function ProductPageClient(): ReactElement {
   const { data: productReviews = [] } = useQuery<readonly UserReview[]>({
     queryKey: PRODUCT_REVIEWS_QK(productId),
     queryFn: () => reviewsApi.getProductReviews(productId),
-    enabled: productId.length > 0 && tab === "reviews",
+    enabled: productId.length > 0 && tab === "reviews" && !isDisabled,
     retry: 0,
     staleTime: 60_000,
   })

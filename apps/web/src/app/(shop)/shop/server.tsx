@@ -68,9 +68,11 @@ export default async function ShopPageServer({
 }: {
   readonly searchParams: Promise<Record<string, string | string[] | undefined>> | Record<string, string | string[] | undefined>
 }): Promise<JSX.Element> {
-  const spResolved = typeof (searchParams as any)?.then === "function"
-    ? await (searchParams as Promise<Record<string, string | string[] | undefined>>)
-    : (searchParams as Record<string, string | string[] | undefined>)
+  const isPromiseLike = <T,>(v: unknown): v is PromiseLike<T> =>
+    typeof v === "object" && v !== null && "then" in (v as Record<string, unknown>) && typeof (v as PromiseLike<T>).then === "function"
+  const spResolved: Record<string, string | string[] | undefined> = isPromiseLike<Record<string, string | string[] | undefined>>(searchParams)
+    ? await searchParams
+    : searchParams
   const sp = new URLSearchParams()
   for (const [k, v] of Object.entries(spResolved ?? {})) {
     if (Array.isArray(v)) {
@@ -117,7 +119,7 @@ export default async function ShopPageServer({
     if (totalPages <= cap) return Array.from({ length: totalPages }, (_, i) => i + 1)
     const half = Math.floor(cap / 2)
     let start = Math.max(1, page - half)
-    let end = Math.min(totalPages, start + cap - 1)
+    const end = Math.min(totalPages, start + cap - 1)
     if (end - start + 1 < cap) start = Math.max(1, end - cap + 1)
     return Array.from({ length: end - start + 1 }, (_, i) => start + i)
   })()
