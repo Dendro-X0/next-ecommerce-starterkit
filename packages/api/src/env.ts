@@ -6,6 +6,25 @@ import { z } from "zod"
 export const apiEnv = (() => {
   // Prefer explicit WEB_ORIGIN, but gracefully fall back to APP_URL or NEXT_PUBLIC_APP_URL
   // to avoid crashes in local/dev when WEB_ORIGIN is not set.
+  const sanitizeUrlLike = (val: unknown): unknown => {
+    if (typeof val !== "string") return val
+    let t = val.trim()
+    if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'"))) {
+      t = t.slice(1, -1).trim()
+    }
+    if (t === "") return undefined
+    if (!/^https?:\/\//i.test(t)) {
+      t = t.includes("localhost") || t.includes("127.0.0.1") ? `http://${t}` : `https://${t}`
+    }
+    try {
+      const u = new URL(t)
+      let out = u.toString()
+      if (out.endsWith("/")) out = out.slice(0, -1)
+      return out
+    } catch {
+      return undefined
+    }
+  }
   const raw = {
     WEB_ORIGIN:
       process.env.WEB_ORIGIN || process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL ||
@@ -32,7 +51,8 @@ export const apiEnv = (() => {
   } as const
 
   const schema = z.object({
-    WEB_ORIGIN: z.string().url("WEB_ORIGIN must be a valid URL").default("http://localhost:3000"),
+    WEB_ORIGIN: z
+      .preprocess(sanitizeUrlLike, z.string().url("WEB_ORIGIN must be a valid URL").default("http://localhost:3000")),
     ADMIN_EMAILS: z.string().optional().default(""),
     AFFILIATE_COMMISSION_PCT: z.preprocess((v) => {
       if (typeof v !== "string") return v
