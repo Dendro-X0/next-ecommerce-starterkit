@@ -5,7 +5,16 @@ import { z } from "zod"
  */
 export const authEnv = (() => {
   const schema = z.object({
-    BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
+    // Required in production. In CI/dev builds, default to a dummy value so Next
+    // can statically analyze and bundle route handlers without failing.
+    BETTER_AUTH_SECRET: z.preprocess(
+      (v) => {
+        const s = typeof v === "string" ? v.trim() : undefined
+        if (!s && process.env.NODE_ENV !== "production") return "ci-only-dummy-secret"
+        return v
+      },
+      z.string().min(1, "BETTER_AUTH_SECRET is required"),
+    ),
     ENABLE_CROSS_SITE_COOKIES: z
       .string()
       .optional()
