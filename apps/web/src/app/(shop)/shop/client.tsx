@@ -158,7 +158,7 @@ export default function ShopPageClient(): JSX.Element {
     if (totalPages <= cap) return Array.from({ length: totalPages }, (_, i) => i + 1)
     const half = Math.floor(cap / 2)
     let start = Math.max(1, currentPage - half)
-    let end = Math.min(totalPages, start + cap - 1)
+    const end = Math.min(totalPages, start + cap - 1)
     if (end - start + 1 < cap) start = Math.max(1, end - cap + 1)
     return Array.from({ length: end - start + 1 }, (_, i) => start + i)
   }
