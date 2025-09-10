@@ -4,15 +4,15 @@ import { z } from "zod"
 export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
-    BETTER_AUTH_SECRET: z.string().min(1),
-    EMAIL_FROM: z.string().email(),
-    GOOGLE_CLIENT_ID: z.string().min(1),
-    GOOGLE_CLIENT_SECRET: z.string().min(1),
-    GITHUB_CLIENT_ID: z.string().min(1),
-    GITHUB_CLIENT_SECRET: z.string().min(1),
+    BETTER_AUTH_SECRET: z.string().min(1).optional(),
+    EMAIL_FROM: z.string().email().optional(),
+    GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+    GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
+    GITHUB_CLIENT_ID: z.string().min(1).optional(),
+    GITHUB_CLIENT_SECRET: z.string().min(1).optional(),
   },
   client: {
-    NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_APP_URL: z.string().url().optional(),
     // Optional; falls back to http://localhost:8000 in auth-client if not set
     NEXT_PUBLIC_API_URL: z.string().url().optional(),
   },

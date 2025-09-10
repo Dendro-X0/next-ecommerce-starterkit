@@ -4,6 +4,23 @@ import { z } from "zod"
  * Server-only environment validation for the auth package.
  */
 export const authEnv = (() => {
+  // Sanitize URL-like envs: trim, strip wrapping quotes, validate, remove trailing slash.
+  const sanitizeOptionalUrl = (val: unknown): unknown => {
+    if (typeof val !== "string") return val
+    let t = val.trim()
+    if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'"))) {
+      t = t.slice(1, -1).trim()
+    }
+    if (t === "") return undefined
+    try {
+      const u = new URL(t)
+      let out = u.toString()
+      if (out.endsWith("/")) out = out.slice(0, -1)
+      return out
+    } catch {
+      return undefined
+    }
+  }
   const schema = z.object({
     // Required in production. In CI/dev builds, default to a dummy value so Next
     // can statically analyze and bundle route handlers without failing.
@@ -46,10 +63,10 @@ export const authEnv = (() => {
     // Resend (production) – currently optional/unutilized
     RESEND_API_KEY: z.string().optional(),
     // Base application URLs (optional). Treat empty strings as undefined.
-    APP_URL: z
-      .preprocess((v) => (typeof v === "string" && v.trim() === "" ? undefined : v), z.string().url().optional()),
-    NEXT_PUBLIC_APP_URL: z
-      .preprocess((v) => (typeof v === "string" && v.trim() === "" ? undefined : v), z.string().url().optional()),
+    APP_URL: z.preprocess(sanitizeOptionalUrl, z.string().url().optional()),
+    // Do not enforce URL validation for NEXT_PUBLIC_APP_URL here; it is optional and
+    // may be blank in preview/CI. Server logic will sanitize/fallback as needed.
+    NEXT_PUBLIC_APP_URL: z.string().optional(),
     // OAuth providers (optional)
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
