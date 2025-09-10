@@ -15,7 +15,8 @@ type NavItem = {
 
 const navigationItems: ReadonlyArray<NavItem> = [
   { title: "Shop", href: "/shop" },
-  { title: "Categories", href: "/categories", hasDropdown: true },
+  // Categories dropdown removed for performance; now a simple link to /categories
+  { title: "Categories", href: "/categories" },
   { title: "Contact", href: "/contact" },
   { title: "Dashboard", href: "/dashboard/user" },
 ]
