@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies (workspace root)
         run: pnpm -w install --frozen-lockfile
 
+      # Safety: ensure package-level node_modules links exist for web
+      # Some runners mis-detect workspace links during turbo steps.
+      - name: Install dependencies (web)
+        run: pnpm -C apps/web install --frozen-lockfile
+
       - name: Lint
         run: pnpm -w turbo run lint
 

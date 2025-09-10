@@ -34,9 +34,11 @@ export const authEnv = (() => {
 
     // Resend (production) – currently optional/unutilized
     RESEND_API_KEY: z.string().optional(),
-    // Base application URLs (optional)
-    APP_URL: z.string().url().optional(),
-    NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+    // Base application URLs (optional). Treat empty strings as undefined.
+    APP_URL: z
+      .preprocess((v) => (typeof v === "string" && v.trim() === "" ? undefined : v), z.string().url().optional()),
+    NEXT_PUBLIC_APP_URL: z
+      .preprocess((v) => (typeof v === "string" && v.trim() === "" ? undefined : v), z.string().url().optional()),
     // OAuth providers (optional)
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
