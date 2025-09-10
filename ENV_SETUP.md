@@ -1,5 +1,27 @@
 # Environment Setup
 
+This document explains configuration keys and recommended values. For a ready‑to‑copy template, see `/.env.local.example` and copy it into `apps/web/.env.local`.
+
+## Minimal for local/dev
+
+Set at least the following to run locally:
+
+```
+WEB_ORIGIN=http://localhost:3000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB
+BETTER_AUTH_SECRET=your-long-random-secret
+ADMIN_EMAILS=admin@example.com
+# Optional (client allowlist; falls back to ADMIN_EMAILS)
+NEXT_PUBLIC_ADMIN_EMAILS=admin@example.com
+
+# Frontend toggles (sane defaults for real auth/UI)
+NEXT_PUBLIC_BOOT_MINIMAL=false
+NEXT_PUBLIC_FRONTEND_ONLY=false
+NEXT_PUBLIC_DISABLE_HEADER_INTERACTIONS=false
+NEXT_PUBLIC_DISABLE_AUTH_ISLAND=false
+```
+
 Create `apps/web/.env.local` with the following keys:
 
 ```

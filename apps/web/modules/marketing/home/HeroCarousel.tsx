@@ -4,28 +4,40 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ArrowRight, ChevronLeft, ChevronRight, Github, Star } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import { animate, motion, useMotionValue } from "motion/react"
-import Image from "next/image"
-import Link from "next/link"
+import { SafeImage } from "@/components/ui/safe-image"
+import { AppLink } from "../../shared/components/app-link"
 import { useEffect, useState } from "react"
 
-const heroSlides = [
+type HeroStat = Readonly<{ label: string; value: string }>
+type Slide = Readonly<{
+  id: number
+  title: string
+  subtitle: string
+  description: string
+  image: string
+  cta: Readonly<{
+    primary: Readonly<{ text: string; href: string; icon?: LucideIcon }>
+    secondary: Readonly<{ text: string; href: string }>
+  }>
+  stats?: readonly HeroStat[]
+  badge: string
+}>
+
+const heroSlides: readonly Slide[] = [
   {
     id: 1,
     title: "Next.js Ecommerce Starterkit",
     subtitle: "Ship faster with best practices",
     description:
-      "Production-ready starterkit powered by Next.js 15, TypeScript, Tailwind CSS, and shadcn/ui. Accessible UI, modern DX, and batteries‑included auth, payments, and admin.",
+      "A comprehensive, production‑ready foundation: Next.js 15, TypeScript, Tailwind CSS, shadcn/ui, Better Auth, Drizzle, and a modular monorepo. Built to learn from and launch with.",
     image: "/shop1.png",
     cta: {
-      primary: { text: "Star on GitHub", href: "https://github.com/your-repo", icon: Github },
+      primary: { text: "Star on GitHub", href: "https://github.com/Dendro-X0/next-ecommerce-starterkit", icon: Github },
       secondary: { text: "Explore the demo", href: "/shop" },
     },
-    stats: [
-      { label: "Components", value: "100+" },
-      { label: "Pages", value: "25+" },
-      { label: "TypeScript", value: "100%" },
-    ],
+    stats: [],
     badge: "Open Source",
   },
   {
@@ -36,14 +48,10 @@ const heroSlides = [
       "SSR/ISR, routing, forms, state, and UI primitives that scale. Payments, auth, and an admin dashboard included so you can focus on your product.",
     image: "/admin_dashboard1.png",
     cta: {
-      primary: { text: "See features", href: "/features" },
-      secondary: { text: "Read docs", href: "/docs" },
+      primary: { text: "Explore the demo", href: "/shop" },
+      secondary: { text: "Read the README", href: "https://github.com/Dendro-X0/next-ecommerce-starterkit#readme" },
     },
-    stats: [
-      { label: "Core Patterns", value: "20+" },
-      { label: "Charts & Tables", value: "10+" },
-      { label: "Tested Flows", value: "Stripe & PayPal" },
-    ],
+    stats: [],
     badge: "Production Ready",
   },
   {
@@ -51,24 +59,20 @@ const heroSlides = [
     title: "Learn or launch today",
     subtitle: "Educational & commercial use",
     description:
-      "Great for learning modern web fundamentals or shipping a v1. Clean code, clear structure, and practical examples throughout.",
+      "Built for deep learning and real shipping. Clean structure, typed clients, and pragmatic patterns across auth, admin, payments, and more.",
     image: "/user_dashboard1.png",
     cta: {
       primary: { text: "Get started", href: "/getting-started" },
-      secondary: { text: "View examples", href: "/examples" },
+      secondary: { text: "Browse code", href: "https://github.com/Dendro-X0/next-ecommerce-starterkit" },
     },
-    stats: [
-      { label: "Learning Hours", value: "40+" },
-      { label: "Tutorials", value: "15+" },
-      { label: "Use Cases", value: "10+" },
-    ],
+    stats: [],
     badge: "Educational",
   },
 ]
 
 export function HeroCarousel() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [currentSlide, setCurrentSlide] = useState<number>(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true)
   const DRAG_THRESHOLD_PX: number = 80
   const x = useMotionValue(0)
 
@@ -97,18 +101,19 @@ export function HeroCarousel() {
     setIsAutoPlaying(false)
   }
 
-  const currentSlideData = heroSlides[currentSlide]
+  const currentSlideData: Slide = heroSlides[currentSlide]
 
   return (
     <section className="relative w-full h-[600px] lg:h-[700px] overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <Image
+        <SafeImage
           src={currentSlideData.image || "/placeholder.svg"}
           alt={currentSlideData.title}
           fill
-          className="object-cover opacity-20"
+          sizes="100vw"
           priority
+          className="object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/90" />
       </div>
@@ -154,39 +159,42 @@ export function HeroCarousel() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button size="lg" asChild>
-                <Link href={currentSlideData.cta.primary.href}>
+                <AppLink href={currentSlideData.cta.primary.href}>
                   {currentSlideData.cta.primary.icon && (
                     <currentSlideData.cta.primary.icon className="mr-2 h-5 w-5" />
                   )}
                   {currentSlideData.cta.primary.text}
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </AppLink>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href={currentSlideData.cta.secondary.href}>
+                <AppLink href={currentSlideData.cta.secondary.href}>
                   {currentSlideData.cta.secondary.text}
-                </Link>
+                </AppLink>
               </Button>
             </div>
 
-            {/* Stats */}
-            <div className="flex justify-center lg:justify-start gap-8 pt-8">
-              {currentSlideData.stats.map((stat) => (
-                <div key={`${stat.label}-${stat.value}`} className="text-center">
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            {/* Stats (optional) */}
+            {currentSlideData.stats && currentSlideData.stats.length > 0 && (
+              <div className="flex justify-center lg:justify-start gap-8 pt-8">
+                {currentSlideData.stats.map((stat) => (
+                  <div key={`${stat.label}-${stat.value}`} className="text-center">
+                    <div className="text-2xl font-bold">{stat.value}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Visual Element */}
           <div className="relative hidden lg:block">
             <div className="relative aspect-square lg:aspect-[4/3] overflow-hidden rounded-2xl bg-muted border flex items-center justify-center">
-              <Image
+              <SafeImage
                 src={currentSlideData.image || "/placeholder.svg"}
                 alt={currentSlideData.title}
                 fill
+                sizes="(max-width: 1024px) 0px, 40vw"
                 className="object-cover"
               />
             </div>
@@ -208,40 +216,44 @@ export function HeroCarousel() {
         </div>
       </motion.div>
 
-      {/* Navigation Arrows */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-background/80 backdrop-blur"
-        onClick={prevSlide}
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </Button>
-
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-background/80 backdrop-blur"
-        onClick={nextSlide}
-      >
-        <ChevronRight className="h-4 w-4" />
-      </Button>
-
-      {/* Dots Indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
-        {heroSlides.map((slide, index) => (
-          <button
-            type="button"
-            key={slide.id}
-            onClick={() => goToSlide(index)}
-            className={cn(
-              "w-3 h-3 rounded-full transition-all duration-300",
-              currentSlide === index
-                ? "bg-primary scale-125"
-                : "bg-background/50 hover:bg-background/70",
-            )}
-          />
-        ))}
+      {/* Controls: arrows + pagination */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
+        <div className="flex items-center gap-2 bg-background/80 backdrop-blur border rounded-full px-3 py-2 shadow-md">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={prevSlide}
+            className="w-8 h-8 rounded-full"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <div className="flex space-x-2 px-1">
+            {heroSlides.map((slide, index) => (
+              <button
+                type="button"
+                key={slide.id}
+                onClick={() => goToSlide(index)}
+                className={cn(
+                  "w-3 h-3 rounded-full transition-all duration-300 border shadow",
+                  currentSlide === index
+                    ? "bg-primary border-primary/70 shadow-primary/20 scale-110"
+                    : "bg-background/70 border-border hover:bg-background",
+                )}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={nextSlide}
+            className="w-8 h-8 rounded-full"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Auto-play indicator */}

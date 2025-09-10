@@ -1,6 +1,12 @@
-# Next.js E‑Commerce Starter Kit (Monorepo)
+# Next.js E‑Commerce Starterkit (Monorepo)
 
-A production‑ready, modular e‑commerce foundation built with Next.js 15 and React 19 in a Turborepo monorepo. The backend is consolidated into Next.js Route Handlers (Hono), with shared packages for Auth, DB, Mail, and UI. All frontend data access uses TanStack Query with typed API clients.
+An end‑to‑end, production‑ready foundation for modern commerce. Built to learn from and launch with.
+
+- Full‑stack Next.js 15 + React 19
+- Strict TypeScript, modular monorepo, clear boundaries
+- Auth, admin, payments, and real API clients out of the box
+
+This template focuses on completeness and maintainability over vanity numbers. It packs practical patterns across the stack—so you can study the code with confidence, customize quickly, and ship faster.
 
 ---
 
@@ -13,6 +19,7 @@ A production‑ready, modular e‑commerce foundation built with Next.js 15 and 
 - [Deployment](./docs/deployment.md)
 - [Env Setup](./ENV_SETUP.md)
 - [Troubleshooting](./docs/troubleshooting.md)
+- [Development Mode Limitations](./docs/dev-mode-limitations.md)
 - [Components Inventory](./docs/components.md)
 - [Release Notes](./docs/release-notes.md)
 - [Roadmap](./ROADMAP.md)
@@ -82,6 +89,7 @@ pnpm dev
 ## Scripts
 
 - `pnpm dev` — start Next.js (API included)
+- `pnpm dev:safe` — start Next.js with the minimalist safe-mode homepage (sets `NEXT_PUBLIC_SAFE_HOME=true`)
 - `pnpm build` — build web
 - `pnpm lint` / `pnpm typecheck` — quality gates
 - `pnpm db:generate` / `pnpm db:migrate` / `pnpm db:seed`
@@ -143,6 +151,53 @@ Full detail: `ROADMAP.md`.
 - Keep UI deterministic: loading skeletons, error states, and `data-testid` for E2E
 - Use typed DTOs and mapping utilities; avoid leaking server DTOs into UI
 - Follow monorepo import rules (prefer `@/modules/*`, `@repo/*`)
+
+## Development Mode Limitations (Summary)
+
+This project prioritizes production performance. In development, dev prefetch and HMR can cause heavy route compilation when paired with large client trees (e.g., navigation dropdowns). We mitigate this by using RSC for `Header`/`Footer`, tiny client islands for interactivity, disabling `next/link` prefetch in critical areas, and keeping the Shop page SSR-first.
+
+Use the following flags in `apps/web/.env.local` for a quiet dev baseline:
+
+```bash
+NEXT_PUBLIC_DISABLE_TOASTER=true
+NEXT_PUBLIC_DISABLE_CART_HYDRATOR=true
+NEXT_PUBLIC_DISABLE_AFFILIATE_TRACKER=true
+NEXT_PUBLIC_DISABLE_HEADER_INTERACTIONS=false
+NEXT_PUBLIC_USE_UI_TEMPLATES=false
+NEXT_PUBLIC_USE_UI_TEMPLATES_SHOP=false
+```
+
+Verify production is smooth (dev overhead doesn’t apply to prod):
+
+```bash
+pnpm --filter web build
+pnpm --filter web start
+```
+
+See the full rationale and checklist in [Development Mode Limitations](./docs/dev-mode-limitations.md).
+
+---
+
+## Dev Modes: Full UI vs Safe Mode
+
+Use safe mode to keep development responsive on large projects or slower hardware.
+
+- `pnpm dev` (default)
+  - No special env is set.
+  - The homepage (`/`) redirects to `/shop` (full UI), which keeps navigation predictable.
+
+- `pnpm dev:safe` (recommended for heavy dev sessions)
+  - Sets `NEXT_PUBLIC_SAFE_HOME=true` via `cross-env`.
+  - The homepage (`/`) renders a minimalist landing page defined in `apps/web/src/app/page.tsx`.
+  - Navigate to `/shop` for the full storefront. This defers heavy client bundles while keeping the app usable.
+
+To enable safe mode persistently, you can also add to `apps/web/.env.local`:
+
+```bash
+NEXT_PUBLIC_SAFE_HOME=true
+```
+
+For production, leave `NEXT_PUBLIC_SAFE_HOME` unset (or `false`). The homepage will redirect to `/shop`.
 
 ---
 
