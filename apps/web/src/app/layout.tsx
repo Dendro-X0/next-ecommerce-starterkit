@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import "./(shop)/globals.css"
+import "./globals.css"
 import { GlobalCrashOverlay } from "modules/ui/components/global-crash-overlay"
 import { minimalBoot, animationsDisabled, productsDisabled, uiTemplates } from "@/lib/safe-mode"
 import { ClientProviders } from "@/components/providers/client-providers"

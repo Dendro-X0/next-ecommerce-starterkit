@@ -1,6 +1,9 @@
 import type { JSX } from "react"
-import { redirect } from "next/navigation"
 import { AppLink } from "../../modules/shared/components/app-link"
+import { ShopHome } from "@/components/home/ShopHome"
+import { Header } from "@/components/layout/header"
+import { Footer } from "@/components/layout/footer"
+import { ClientIslands } from "./client-islands"
 
 /**
  * Minimal landing page rendered outside of the (shop) group.
@@ -11,8 +14,26 @@ export default function LandingPage(): JSX.Element {
   const safeHome: string | undefined = process.env.NEXT_PUBLIC_SAFE_HOME
   const isSafeMode: boolean = safeHome === "true" || safeHome === "1"
   if (!isSafeMode) {
-    // Do not import another route's page component. Redirect to the shop route instead.
-    redirect("/shop")
+    const disableToaster: boolean =
+      (process.env.NEXT_PUBLIC_DISABLE_TOASTER ?? "false").toLowerCase() === "true"
+    const disableCartHydrator: boolean =
+      (process.env.NEXT_PUBLIC_DISABLE_CART_HYDRATOR ?? "false").toLowerCase() === "true"
+    const disableAffiliate: boolean =
+      (process.env.NEXT_PUBLIC_DISABLE_AFFILIATE_TRACKER ?? "false").toLowerCase() === "true"
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="flex-1">
+          <ClientIslands
+            enableAffiliate={!disableAffiliate}
+            enableCartHydrator={!disableCartHydrator}
+            enableToaster={!disableToaster}
+          />
+          <ShopHome />
+        </div>
+        <Footer />
+      </div>
+    )
   }
   return (
     <main className="min-h-screen flex items-center justify-center">
