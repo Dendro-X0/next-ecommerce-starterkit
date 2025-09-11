@@ -10,12 +10,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import type { PaymentMethod } from "@/types/cart"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreditCard } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import type { JSX } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
-import { paymentsStripeApi } from "@repo/payments/client/stripe"
-import { paymentsPaypalApi } from "@repo/payments/client/paypal"
+import { useStripeConfig } from "@repo/payments/hooks/use-stripe-config"
+import { usePaypalConfig } from "@repo/payments/hooks/use-paypal-config"
 
 /**
  * Checkout payment step. Supports custom provider ordering and optional back button.
@@ -57,37 +57,10 @@ export function PaymentForm({
   const defaultProviders: ReadonlyArray<PaymentMethod["type"]> = ["card", "stripe", "paypal"]
   const availableProviders: ReadonlyArray<PaymentMethod["type"]> = providers ?? defaultProviders
   const [paymentType, setPaymentType] = useState<PaymentMethod["type"]>(availableProviders[0])
-  const [stripeConfigured, setStripeConfigured] = useState<boolean>(false)
-  const [paypalConfigured, setPaypalConfigured] = useState<boolean>(false)
-  useEffect(() => {
-    let cancelled = false
-    ;(async () => {
-      try {
-        const [sc, pc] = await Promise.all([
-          paymentsStripeApi
-            .config()
-            .then((r) => r.configured)
-            .catch(() => false),
-          paymentsPaypalApi
-            .config()
-            .then((r) => r.configured)
-            .catch(() => false),
-        ])
-        if (!cancelled) {
-          setStripeConfigured(sc)
-          setPaypalConfigured(pc)
-        }
-      } catch {
-        if (!cancelled) {
-          setStripeConfigured(false)
-          setPaypalConfigured(false)
-        }
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const stripeCfg = useStripeConfig()
+  const paypalCfg = usePaypalConfig()
+  const stripeConfigured: boolean = stripeCfg.data?.configured === true
+  const paypalConfigured: boolean = paypalCfg.data?.configured === true
   const cardSchema = useMemo(
     () =>
       z.object({

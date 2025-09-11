@@ -21,7 +21,7 @@ Optional (emails/payments; warnings only if missing in production):
 
 - `RESEND_API_KEY` and `EMAIL_FROM` — enable transactional emails
 - `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID` — enable PayPal
-- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` — enable Stripe
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — enable Stripe
 
 Frontend toggles (defaults are safe):
 

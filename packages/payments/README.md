@@ -4,6 +4,12 @@ Typed client utilities for Payments used across apps. Currently provides:
 
 - Stripe client: `@repo/payments/client/stripe`
 - PayPal client: `@repo/payments/client/paypal`
+- React Query hooks:
+  - `@repo/payments/hooks/use-stripe-config`
+  - `@repo/payments/hooks/use-paypal-config`
+  - `@repo/payments/hooks/use-stripe-intent`
+  - `@repo/payments/hooks/use-stripe-refund`
+  - `@repo/payments/hooks/use-paypal-order`
 
 Server routes live in `packages/api/src/routes/`:
 - `payments-stripe.ts`
@@ -14,6 +20,12 @@ Server routes live in `packages/api/src/routes/`:
 ```ts
 import { paymentsStripeApi } from "@repo/payments/client/stripe"
 import { paymentsPaypalApi } from "@repo/payments/client/paypal"
+// Hooks
+import { useStripeConfig } from "@repo/payments/hooks/use-stripe-config"
+import { usePaypalConfig } from "@repo/payments/hooks/use-paypal-config"
+import { useStripeIntent } from "@repo/payments/hooks/use-stripe-intent"
+import { useStripeRefund } from "@repo/payments/hooks/use-stripe-refund"
+import { usePaypalCreateOrder, usePaypalCapture } from "@repo/payments/hooks/use-paypal-order"
 ```
 
 Both clients call the backend endpoints under `/api/v1/payments/...`.

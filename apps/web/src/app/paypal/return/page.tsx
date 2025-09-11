@@ -1,8 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { paymentsPaypalApi } from "@repo/payments/client/paypal"
-import { useMutation } from "@tanstack/react-query"
+import { usePaypalCapture } from "@repo/payments/hooks/use-paypal-order"
 import { Loader2 } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useMemo } from "react"
@@ -18,18 +17,7 @@ export default function PaypalReturnPage(): JSX.Element {
   const search = useSearchParams()
   const token: string | null = useMemo(() => search.get("token"), [search])
   const ORDERS_PATH: string = "/dashboard/user/orders"
-
-  const captureMut = useMutation({
-    mutationFn: async (orderId: string) => paymentsPaypalApi.capture({ orderId }),
-    onSuccess: () => {
-      toast.success("Payment captured successfully")
-      router.replace(ORDERS_PATH)
-    },
-    onError: (err: unknown) => {
-      const message: string = err instanceof Error ? err.message : "Failed to capture payment"
-      toast.error(message)
-    },
-  })
+  const captureMut = usePaypalCapture()
 
   useEffect(() => {
     if (!token) {
@@ -37,7 +25,19 @@ export default function PaypalReturnPage(): JSX.Element {
       return
     }
     if (!captureMut.isPending && !captureMut.isSuccess) {
-      captureMut.mutate(token)
+      captureMut.mutate(
+        { orderId: token },
+        {
+          onSuccess: () => {
+            toast.success("Payment captured successfully")
+            router.replace(ORDERS_PATH)
+          },
+          onError: (err: unknown) => {
+            const message: string = err instanceof Error ? err.message : "Failed to capture payment"
+            toast.error(message)
+          },
+        },
+      )
     }
   }, [token, captureMut])
 

@@ -2,12 +2,11 @@
 
 import { PageHeader } from "@/app/dashboard/_components/page-header"
 import { Section } from "@/app/dashboard/_components/section"
-import { paymentsStripeApi } from "@repo/payments/client/stripe"
+import { useStripeRefund } from "@repo/payments/hooks/use-stripe-refund"
 import { Button } from "@components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card"
 import { Input } from "@components/ui/input"
 import { Label } from "@components/ui/label"
-import { useMutation } from "@tanstack/react-query"
 import type React from "react"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -27,16 +26,7 @@ export default function RefundsPage(): React.ReactElement {
   const [amountCents, setAmountCents] = useState<string>("")
   const [reason, setReason] = useState<RefundInput["reason"]>(undefined)
 
-  const mutation = useMutation({
-    mutationFn: async (input: RefundInput) => paymentsStripeApi.refund(input),
-    onSuccess: (res: Readonly<{ id: string; status: string }>) => {
-      toast.success(`Refund created: ${res.id} (${res.status})`)
-    },
-    onError: (err: unknown) => {
-      const msg: string = err instanceof Error ? err.message : "Refund failed"
-      toast.error(msg)
-    },
-  })
+  const mutation = useStripeRefund()
 
   const onSubmit = (): void => {
     if (!paymentRef) {
@@ -53,7 +43,15 @@ export default function RefundsPage(): React.ReactElement {
       ...(amt ? { amountCents: amt } : {}),
       ...(reason ? { reason } : {}),
     } as const
-    mutation.mutate(payload)
+    mutation.mutate(payload, {
+      onSuccess: (res: Readonly<{ id: string; status: string }>) => {
+        toast.success(`Refund created: ${res.id} (${res.status})`)
+      },
+      onError: (err: unknown) => {
+        const msg: string = err instanceof Error ? err.message : "Refund failed"
+        toast.error(msg)
+      },
+    })
   }
 
   return (

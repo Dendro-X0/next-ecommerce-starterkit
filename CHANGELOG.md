@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2025-09-10
+## [1.1.0] - 2025-09-10
 ### Added
 - Introduced `@repo/payments` package consolidating typed Stripe/PayPal clients for reuse across apps.
 - New payments-oriented hooks in `@repo/payments`:

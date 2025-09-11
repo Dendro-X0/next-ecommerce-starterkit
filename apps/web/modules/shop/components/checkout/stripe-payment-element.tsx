@@ -1,6 +1,7 @@
 "use client"
 
-import { paymentsStripeApi } from "@repo/payments/client/stripe"
+import { useStripeConfig } from "@repo/payments/hooks/use-stripe-config"
+import { useStripeIntent } from "@repo/payments/hooks/use-stripe-intent"
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { type Stripe, type StripeElements, loadStripe } from "@stripe/stripe-js"
 import { AlertCircle } from "lucide-react"
@@ -70,22 +71,25 @@ export function StripePaymentElement({
 
   const pubKey: string | undefined = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   const stripePromise = useMemo(() => (pubKey ? loadStripe(pubKey) : null), [pubKey])
+  const stripeCfg = useStripeConfig()
+  const createIntent = useStripeIntent()
 
   useEffect(() => {
     let active = true
     ;(async () => {
       try {
-        const cfg = await paymentsStripeApi.config()
-        if (!cfg.configured || !pubKey) {
+        if (!stripeCfg.data?.configured || !pubKey) {
           setError("Stripe is not configured. Using demo checkout.")
           return
         }
-        const intent = await paymentsStripeApi.createIntent(
-          { amountCents, currency, metadata: { source: "checkout" } },
-          { idempotencyKey: idemKeyRef.current },
-        )
+        const res = await createIntent.mutateAsync({
+          amountCents,
+          currency,
+          metadata: { source: "checkout" },
+          idempotencyKey: idemKeyRef.current,
+        })
         if (!active) return
-        setClientSecret(intent.clientSecret ?? null)
+        setClientSecret(res.clientSecret ?? null)
       } catch (e) {
         setError(e instanceof Error ? e.message : "Unable to initialize Stripe.")
       }
@@ -94,7 +98,7 @@ export function StripePaymentElement({
       active = false
       setConfirmFn(null)
     }
-  }, [amountCents, currency, pubKey, setConfirmFn])
+  }, [amountCents, currency, pubKey, stripeCfg.data?.configured, setConfirmFn, createIntent])
 
   if (!pubKey) {
     return (

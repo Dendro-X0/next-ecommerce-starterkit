@@ -88,4 +88,4 @@ Stripe Elements wrapper: `apps/web/modules/shop/components/checkout/stripe-payme
 
 - 501 Not Implemented from any payment endpoint → provider not configured (missing env).
 - Orders not updated after payment → verify webhook secrets/IDs and logs in Stripe/PayPal dashboards.
-- Hobby sluggishness → keep NEXT_UNOPTIMIZED_IMAGES=true; consider splitting catch-all API routes.
+- Hobby sluggishness → keep NEXT_UNOPTIMIZED_IMAGES=true; payments routes are already split by default under `/api/v1/payments/**`. Consider splitting additional API domains if your server bundle grows.

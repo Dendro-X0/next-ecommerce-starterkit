@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button"
 import { isDigitalOnlyCart } from "@/lib/cart/utils"
 import { checkoutApi } from "@/lib/data/checkout"
 import { ordersApi } from "@/lib/data/orders"
-import { paymentsPaypalApi } from "@repo/payments/client/paypal"
-import { paymentsStripeApi } from "@repo/payments/client/stripe"
+import { usePaypalCreateOrder } from "@repo/payments/hooks/use-paypal-order"
+import { usePaypalConfig } from "@repo/payments/hooks/use-paypal-config"
+import { useStripeConfig } from "@repo/payments/hooks/use-stripe-config"
 import { useCartStore } from "@/lib/stores/cart"
 import type { PaymentMethod, ShippingAddress } from "@/types/cart"
 import { toOrderItemsFromCart } from "@/types/order"
@@ -40,6 +41,9 @@ export default function CheckoutPage() {
   const orderIdemKeyRef = useRef<string>(
     `ord_${Math.random().toString(36).slice(2)}_${Date.now().toString(36)}`,
   )
+  const paypalCfg = usePaypalConfig()
+  const stripeCfg = useStripeConfig()
+  const createPaypalOrder = usePaypalCreateOrder()
 
   // Build quote request payload; depends on items and shippingAddress
   const quoteReq = useMemo(() => {
@@ -106,8 +110,8 @@ export default function CheckoutPage() {
       let paymentProvider: "stripe" | "paypal" | undefined = undefined
       let paymentRef: string | undefined = undefined
       if (paymentMethod?.type === "stripe") {
-        const cfg = await paymentsStripeApi.config()
-        if (!cfg.configured) {
+        const stripeConfigured: boolean | undefined = stripeCfg.data?.configured
+        if (stripeConfigured === false) {
           toast.info("Stripe not configured; placing demo order without charge")
         } else if (!confirmStripe) {
           toast.error("Payment form not ready. Please try again.")
@@ -144,15 +148,13 @@ export default function CheckoutPage() {
           }
         }
       } else if (paymentMethod?.type === "paypal") {
-        const cfg = await paymentsPaypalApi.config()
-        if (!cfg.configured) {
+        const paypalConfigured: boolean | undefined = paypalCfg.data?.configured
+        if (paypalConfigured === false) {
           toast.info("PayPal not configured; placing demo order without charge")
         } else {
           try {
             const amountForPayPalCents = Math.round((quote?.total ?? total) * 100)
-            const created = await paymentsPaypalApi.createOrder({
-              amountCents: amountForPayPalCents,
-            })
+            const created = await createPaypalOrder.mutateAsync({ amountCents: amountForPayPalCents })
             paymentProvider = "paypal"
             paymentRef = created.id
             desiredStatus = "pending"

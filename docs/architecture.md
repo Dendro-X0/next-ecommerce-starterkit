@@ -19,6 +19,7 @@
 - `packages/db` — Drizzle schema, migrations, seeding
 - `packages/mail` — Mail transport abstraction
 - `packages/ui` — Shared UI primitives
+- `packages/payments` — Shared typed payments clients and React Query hooks
 - `packages/*-config` — Shared TS/ESLint configs
 
 ## API Conventions
@@ -27,3 +28,4 @@
 - Pagination: `page`, `pageSize`, `total`
 - Sorting: `newest`, `price_asc`, `price_desc`, `rating`, `popularity`
 - Auth: Better Auth; admin routes protected by `ensureAdmin`
+- Payments endpoints are mounted under `/api/v1/payments/**` using focused route handlers to reduce serverless bundle size.

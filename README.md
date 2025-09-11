@@ -50,6 +50,7 @@ This template focuses on completeness and maintainability over vanity numbers. I
 - `packages/db` — Drizzle schema, migrations, seeding
 - `packages/mail` — Mail transport abstraction
 - `packages/ui` — Shared UI primitives
+- `packages/payments` — Shared typed payments clients and hooks
 - `packages/*-config` — Shared TS/ESLint configs
 
 ---
@@ -101,7 +102,7 @@ pnpm dev
 
 ## Conventions
 
-- One typed client per API domain under `apps/web/src/lib/data/*` (single export per file)
+- Typed clients live under the app (`apps/web/src/lib/data/*`) or shared packages like `@repo/payments` (one export per file)
 - TanStack Query for all server interactions (queries + mutations)
 - Query Keys collocated (e.g., `apps/web/src/lib/wishlist/query-keys.ts`)
 - DTO→UI mapping at the client boundary; Zod schemas where applicable
