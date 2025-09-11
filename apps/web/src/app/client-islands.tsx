@@ -53,6 +53,8 @@ function useIdleOrFirstInteraction(timeoutMs: number = 3000): boolean {
 }
 
 export function ClientIslands({ enableAffiliate, enableCartHydrator, enableToaster }: ClientIslandsProps): JSX.Element | null {
+  const disableIslands: boolean = (process.env.NEXT_PUBLIC_DISABLE_ISLANDS ?? "false").toLowerCase() === "true"
+  if (disableIslands) return null
   const ready: boolean = useIdleOrFirstInteraction(4000)
   if (!ready) return null
   return (

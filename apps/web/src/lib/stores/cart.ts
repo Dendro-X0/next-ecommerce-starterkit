@@ -9,6 +9,22 @@ import type { Cart, CartItem } from "@/types/cart"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
+/**
+ * Compare two arrays of cart items for shallow equality by id, product.id and quantity.
+ * Keeps functions small and single-purpose per user rules.
+ */
+function cartItemsEqual(a: readonly CartItem[], b: readonly CartItem[]): boolean {
+  if (a.length !== b.length) return false
+  for (let i = 0; i < a.length; i += 1) {
+    const x = a[i]!
+    const y = b[i]!
+    if (x.id !== y.id) return false
+    if (x.product.id !== y.product.id) return false
+    if (x.quantity !== y.quantity) return false
+  }
+  return true
+}
+
 interface CartStore extends Cart {
   addItem: (product: Product, quantity?: number) => void
   removeItem: (itemId: string) => void
@@ -107,6 +123,9 @@ export const useCartStore = create<CartStore>()(
       },
 
       hydrate: (items: ReadonlyArray<CartItem>) => {
+        const prev = get().items
+        // Avoid infinite update loops by skipping when cart content is unchanged.
+        if (cartItemsEqual(prev, items)) return
         set({ items: [...items] })
         get().calculateTotals()
       },

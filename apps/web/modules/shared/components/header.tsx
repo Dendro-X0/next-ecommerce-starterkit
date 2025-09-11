@@ -25,6 +25,7 @@ export function Header(): JSX.Element {
   const disableHeaderInteractions: boolean = (process.env.NEXT_PUBLIC_DISABLE_HEADER_INTERACTIONS ?? "false").toLowerCase() === "true"
   // Hide announcement bar by default to reduce CLS; enable via env when desired
   const disableAnnouncementBar: boolean = (process.env.NEXT_PUBLIC_DISABLE_ANNOUNCEMENT_BAR ?? "false").toLowerCase() === "true"
+  const disableHeaderSearch: boolean = (process.env.NEXT_PUBLIC_DISABLE_HEADER_SEARCH ?? "false").toLowerCase() === "true"
   if (disableHeaderInteractions) {
     // Minimal, static header with no data fetching or interactivity
     return (
@@ -36,19 +37,20 @@ export function Header(): JSX.Element {
             <nav className="hidden md:flex items-center space-x-1">
               <AppLink href="/shop" className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-all duration-200">Shop</AppLink>
               <AppLink href="/categories" className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-all duration-200">Categories</AppLink>
-              <AppLink href="/contact" className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-all duration-200">Contact</AppLink>
             </nav>
           </div>
           {/* Center: search */}
-          <div className="hidden lg:flex lg:col-span-4 justify-center">
-            <div className="w-full max-w-md">
-              <HeaderSearch />
+          {!disableHeaderSearch && (
+            <div className="hidden lg:flex lg:col-span-4 justify-center">
+              <div className="w-full max-w-md">
+                <HeaderSearch />
+              </div>
             </div>
-          </div>
+          )}
           {/* Right: theme toggle + hamburger (mobile on far right) */}
           <div className="relative z-20 pointer-events-auto flex items-center justify-end gap-2 sm:gap-3 lg:col-span-4">
             <ThemeToggle />
-            <HeaderMobileMenu navigationItems={navigationItems} />
+            {/* Static header: omit interactive mobile menu to isolate hydration */}
           </div>
         </div>
       </header>
@@ -87,11 +89,13 @@ export function Header(): JSX.Element {
             <HeaderNavIsland navigationItems={navigationItems} />
           </div>
           {/* Center: search */}
-          <div className="hidden lg:flex lg:col-span-4 justify-center">
-            <div className="w-full max-w-md">
-              <HeaderSearch />
+          {!disableHeaderSearch && (
+            <div className="hidden lg:flex lg:col-span-4 justify-center">
+              <div className="w-full max-w-md">
+                <HeaderSearch />
+              </div>
             </div>
-          </div>
+          )}
           {/* Right: actions + theme toggle + mobile hamburger (far right) */}
           <div className="relative z-20 pointer-events-auto flex items-center justify-end gap-2 sm:gap-3 lg:col-span-4">
             <HeaderActionsIsland />

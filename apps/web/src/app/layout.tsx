@@ -36,7 +36,7 @@ export default function RootLayout({
         data-products-disabled={productsDisabled ? "true" : "false"}
         data-ui-templates={uiTemplates ? "true" : "false"}
       >
-        {process.env.NODE_ENV !== "production" && (
+        {(process.env.NODE_ENV !== "production" || (process.env.NEXT_PUBLIC_ENABLE_PROD_DIAGNOSTICS ?? "false").toLowerCase() === "true") && (
           <>
             <script
               // This script captures early runtime errors even when React hasn't hydrated
