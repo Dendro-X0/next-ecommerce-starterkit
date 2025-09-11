@@ -53,6 +53,16 @@ Track active work in GitHub issues and milestones. This file is a high‑level g
     - XML sitemap(s) (including localized variants) and robots.txt; image sitemaps for product media.
     - Open Graph/Twitter cards for PDP and key marketing pages.
 
+- Storage & Media (Next Update)
+  - Admin product media uploads currently fall back to placeholders. Integrate a storage service to persist images/videos.
+  - Provider options to evaluate: S3-compatible (Amazon S3, Cloudflare R2), Supabase Storage, UploadThing.
+  - Server-side: signed upload endpoints and validation (size/type/virus scan hook), presigned URL lifecycle, secure public URLs.
+  - Client: update admin `media-uploader` and product form to upload directly to storage using signed URLs; show real previews and persisted media.
+  - Derivatives: image resizing/optimization pipeline (via on-demand image loader, CDN, or webhook-based transforms).
+  - Schema: store media records (URL, kind, width/height, bytes, alt) in DB and reference from Products/Categories.
+  - Permissions: restrict uploads to authenticated admins; enforce max limits and quotas; audit logs for media changes.
+  - Migration: script to move existing placeholder references to real storage paths when available.
+
 ## Medium‑Term
 
 - Notifications

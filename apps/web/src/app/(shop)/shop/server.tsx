@@ -1,5 +1,7 @@
 import type { JSX } from "react"
 import { headers } from "next/headers"
+import { getLocaleFromHeaders } from "modules/shared/lib/i18n/config"
+import { formatCurrency } from "modules/shared/lib/i18n/format"
 
 /**
  * Minimal SSR fallback for the Shop page.
@@ -124,7 +126,8 @@ export default async function ShopPageServer({
     return Array.from({ length: end - start + 1 }, (_, i) => start + i)
   })()
 
-  const formatPrice = (n: number): string => `$${n.toFixed(2)}`
+  const locale = getLocaleFromHeaders(h)
+  const formatPrice = (n: number): string => formatCurrency(locale, n)
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -11,8 +11,13 @@ import { useQuery } from "@tanstack/react-query"
 import { AppLink } from "../../shared/components/app-link"
 import { SafeImage } from "@/components/ui/safe-image"
 import { useEffect, useMemo } from "react"
+import { usePathname } from "next/navigation"
+import { getLocaleFromPath } from "modules/shared/lib/i18n/config"
+import { formatCurrency } from "modules/shared/lib/i18n/format"
 
 export function FeaturedProducts() {
+  const pathname = usePathname()
+  const locale = getLocaleFromPath(pathname)
   const { data, isLoading, error } = useQuery<Readonly<{ items: readonly Product[] }>>({
     queryKey: ["products", "featured", 4],
     queryFn: () => productsApi.featured(4),
@@ -93,12 +98,12 @@ export function FeaturedProducts() {
 
                       <div className="flex items-center gap-2">
                         <span className="text-xl font-bold text-black dark:text-white">
-                          ${product.price}
+                          {formatCurrency(locale, product.price)}
                         </span>
                         {product.originalPrice && (
                           <>
                             <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
-                              ${product.originalPrice}
+                              {formatCurrency(locale, product.originalPrice)}
                             </span>
                           </>
                         )}

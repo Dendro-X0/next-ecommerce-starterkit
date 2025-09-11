@@ -6,3 +6,9 @@ export function getLocaleFromPath(pathname: string): Locale {
   if (pathname.startsWith("/es")) return "es"
   return "en"
 }
+
+export function getLocaleFromHeaders(h: Headers): Locale {
+  const al = h.get("accept-language")?.toLowerCase() ?? ""
+  if (al.startsWith("es")) return "es"
+  return defaultLocale
+}

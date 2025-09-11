@@ -11,12 +11,17 @@ import { useQuery } from "@tanstack/react-query"
 import { AppLink } from "../../shared/components/app-link"
 import { SafeImage } from "@/components/ui/safe-image"
 import { type ReactElement, useEffect, useMemo } from "react"
+import { usePathname } from "next/navigation"
+import { getLocaleFromPath } from "modules/shared/lib/i18n/config"
+import { formatCurrency } from "modules/shared/lib/i18n/format"
 
 /**
  * Top-selling products section fetching live data via TanStack Query.
  * Shows skeletons while loading and a toast on error.
  */
 export function TopSelling(): ReactElement {
+  const pathname = usePathname()
+  const locale = getLocaleFromPath(pathname)
   const { data, isLoading, error } = useQuery<ListProductsResponse>({
     queryKey: ["products", "top-selling"],
     queryFn: () => productsApi.list({ page: 1, pageSize: 12 }),
@@ -100,11 +105,11 @@ export function TopSelling(): ReactElement {
 
                       <div className="flex items-center gap-2">
                         <span className="text-xl font-bold text-black dark:text-white">
-                          ${product.price}
+                          {formatCurrency(locale, product.price)}
                         </span>
                         {product.originalPrice && (
                           <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
-                            ${product.originalPrice}
+                            {formatCurrency(locale, product.originalPrice)}
                           </span>
                         )}
                       </div>

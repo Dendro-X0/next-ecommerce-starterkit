@@ -1,5 +1,6 @@
 import type { JSX } from "react"
 import { productsDisabled } from "@/lib/safe-mode"
+import { headers } from "next/headers"
 
 export default async function CategoryPage({ params }: { params: { slug: string } }): Promise<JSX.Element> {
   if (productsDisabled) {
@@ -10,6 +11,27 @@ export default async function CategoryPage({ params }: { params: { slug: string 
       </div>
     )
   }
+  // Minimal JSON-LD for Category collection page
+  const h = await headers()
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000"
+  const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https")
+  const base = `${proto}://${host}`
+  const url = `${base}/categories/${encodeURIComponent(params.slug)}`
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `Category: ${params.slug}`,
+    url,
+  } as const
   const { default: CategoryPageClient } = await import("./client")
-  return <CategoryPageClient params={params} />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <CategoryPageClient params={params} />
+    </>
+  )
 }
