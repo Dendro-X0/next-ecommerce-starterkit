@@ -10,9 +10,12 @@ import { useSession } from "@/hooks/use-session"
 import { authClient } from "@/lib/auth-client"
 import { type Role, hasRole } from "@/lib/roles"
 import { isAdminEmail } from "@/lib/admin-allowlist"
+import { usePathname } from "next/navigation"
+import { getLocaleFromPath } from "modules/shared/lib/i18n/config"
+import { translate } from "modules/shared/lib/i18n"
 
 export type HeaderMobileNavItem = Readonly<{
-  title: string
+  titleKey: string
   href: string
 }>
 
@@ -24,6 +27,8 @@ export type HeaderMobileNavItem = Readonly<{
  * Mobile hamburger menu. Includes primary navigation and key actions.
  */
 export function HeaderMobileMenu({ navigationItems }: { readonly navigationItems: readonly HeaderMobileNavItem[] }): JSX.Element {
+  const pathname = usePathname()
+  const locale = getLocaleFromPath(pathname)
   const session = useSession()
   const user = session?.user ?? null
   const cartCount: number = useCartStore((s) => s.items.reduce((sum, it) => sum + it.quantity, 0))
@@ -53,11 +58,11 @@ export function HeaderMobileMenu({ navigationItems }: { readonly navigationItems
           <nav className="mt-4 space-y-1">
             {navigationItems.map((item) => (
               <AppLink
-                key={item.title}
+                key={item.titleKey}
                 href={item.href}
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-all duration-200"
               >
-                {item.title}
+                {translate(locale, item.titleKey)}
               </AppLink>
             ))}
           </nav>

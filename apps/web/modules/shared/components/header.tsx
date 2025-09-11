@@ -6,19 +6,20 @@ import { HeaderNavIsland } from "./header-nav-island"
 import { HeaderActionsIsland } from "./header-actions-island"
 import { HeaderSearch } from "./header-search"
 import { HeaderMobileMenu } from "./header-mobile-menu"
+import { LocaleSwitcher } from "./locale-switcher"
 
 type NavItem = {
-  readonly title: string
+  readonly titleKey: string
   readonly href: string
   readonly hasDropdown?: boolean
 }
 
 const navigationItems: ReadonlyArray<NavItem> = [
-  { title: "Shop", href: "/shop" },
+  { titleKey: "nav.shop", href: "/shop" },
   // Categories dropdown removed for performance; now a simple link to /categories
-  { title: "Categories", href: "/categories" },
-  { title: "Contact", href: "/contact" },
-  { title: "Dashboard", href: "/dashboard/user" },
+  { titleKey: "nav.categories", href: "/categories" },
+  { titleKey: "nav.contact", href: "/contact" },
+  { titleKey: "nav.dashboard", href: "/dashboard/user" },
 ]
 
 export function Header(): JSX.Element {
@@ -49,6 +50,7 @@ export function Header(): JSX.Element {
           )}
           {/* Right: theme toggle + hamburger (mobile on far right) */}
           <div className="relative z-20 pointer-events-auto flex items-center justify-end gap-2 sm:gap-3 lg:col-span-4">
+            <LocaleSwitcher />
             <ThemeToggle />
             {/* Static header: omit interactive mobile menu to isolate hydration */}
           </div>
@@ -99,6 +101,7 @@ export function Header(): JSX.Element {
           {/* Right: actions + theme toggle + mobile hamburger (far right) */}
           <div className="relative z-20 pointer-events-auto flex items-center justify-end gap-2 sm:gap-3 lg:col-span-4">
             <HeaderActionsIsland />
+            <LocaleSwitcher />
             <ThemeToggle />
             <HeaderMobileMenu navigationItems={navigationItems} />
           </div>

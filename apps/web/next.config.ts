@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
     // We are running in a Safe Mode and will address lint issues separately.
     ignoreDuringBuilds: true,
   },
+  i18n: {
+    /**
+     * Minimal i18n scaffold. Add more locales as needed.
+     * Default locale remains unprefixed (e.g., "/" for English);
+     * non-default locales are available under subpaths (e.g., "/es").
+     */
+    locales: ["en", "es"],
+    defaultLocale: "en",
+  },
   transpilePackages: [
     "@repo/ui",
     "@repo/auth",

@@ -7,20 +7,51 @@ Track active work in GitHub issues and milestones. This file is a high‑level g
 ## Near‑Term
 
 - Internationalization (i18n)
-  - Next.js i18n routing (locale domains/paths), locale switcher UI, and locale negotiation.
-  - Product/category translation fields; copywriting pipeline; currency formatting.
+  - Routing & UX
+    - Next.js i18n routing (locale subpaths and/or domains) and locale negotiation via `Accept-Language` with cookie persistence.
+    - Header locale switcher UI with accessible combobox and language names in native form (endonym).
+    - Localized static content (marketing pages), dynamic content (catalog), and emails.
+  - Data Model & CMS
+    - Drizzle migrations for translatable fields (product/category name, description, SEO fields), with fallback strategy.
+    - Optional integration with a translation workflow (e.g., Contentlayer/Sanity or external TMS); draft/publish lifecycle.
+  - Formatting & Currency
+    - `Intl.NumberFormat` for currency/number/date formatting based on active locale.
+    - Multi‑currency pricing strategy (display only vs. transactional) and exchange‑rate source; per‑currency rounding rules.
+  - QA & Tooling
+    - Link and sitemap localization, locale‑aware canonical tags.
+    - Add i18n E2E coverage for critical flows (browse → checkout → order).
+
 - Roles & Permissions (RBAC)
   - Roles: Admin, Manager, Support, Customer (extensible); route and action guards.
   - Policy checks in API handlers; audit logs for sensitive mutations.
 - Payments
   - Payment extensions: Apple Pay / Google Pay (Stripe Payment Request).
-  - Adyen; multi-currency and tax/VAT enhancements.
+  - Adyen; multi‑currency and tax/VAT enhancements.
+  - Digital‑first providers (for broader country coverage):
+    - Lemonsqueezy — hosted checkout/portal, subscriptions, licensing; webhooks → internal order status mapping.
+    - Polar — subscriptions/donations for creators; hosted flows; revenue share compliance.
+    - Creem — checkout for digital downloads/memberships; EU VAT handling.
+  - Architecture
+    - Define provider adapter interface in `@repo/payments` (create/confirm/refund/capture/config). Keep RO‑RO typed DTOs.
+    - Add Next.js route handlers per provider under `/api/v1/payments/{provider}/**`; reuse shared idempotency and webhook verification.
+    - Feature‑flag providers via server config; surface availability to the UI via `config` endpoints/hooks.
+  - Deliverables
+    - Demo SKUs/flows for digital goods (download links/license delivery) and physical goods (shipping) for each provider.
+    - Test modes, sandbox credentials, and thorough webhook integration tests.
 - Performance & Observability
   - CDN + cache headers, image optimization, query caching.
   - Structured logging (Pino), tracing/metrics (OTel), basic error triage dashboard.
 - Accessibility & SEO
-  - A11y pass on critical flows (navigation, forms, tables).
-  - Structured data, sitemaps, robots, canonical URLs.
+  - Accessibility (A11y)
+    - End‑to‑end keyboard navigation (skip links, focus outlines, visible focus order, focus traps in dialogs/drawers).
+    - Landmarks and semantics: `header/main/nav/footer`, tables with proper headers, descriptive buttons/links, form labels and error text.
+    - Color contrast audit; prefers‑reduced‑motion considerations; announce async state changes to screen readers.
+    - Tooling: `eslint-plugin-jsx-a11y`, Playwright + axe integration in CI, snapshots for critical pages.
+  - SEO
+    - Route‑level metadata: titles, descriptions, canonical URLs; locale alternates when i18n is enabled.
+    - JSON‑LD structured data for `Product`, `BreadcrumbList`, `Organization`, `FAQ` where relevant.
+    - XML sitemap(s) (including localized variants) and robots.txt; image sitemaps for product media.
+    - Open Graph/Twitter cards for PDP and key marketing pages.
 
 ## Medium‑Term
 

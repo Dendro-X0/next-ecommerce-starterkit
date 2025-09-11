@@ -20,6 +20,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ModularShop",
   description: "An e-commerce boilerplate built with Next.js, TypeScript, and Tailwind CSS.",
+  alternates: {
+    languages: {
+      en: "/",
+      es: "/es",
+    },
+  },
 }
 
 export default function RootLayout({

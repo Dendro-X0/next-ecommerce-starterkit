@@ -4,9 +4,12 @@ import dynamic from "next/dynamic"
 import type { JSX } from "react"
 import { useEffect, useState } from "react"
 import { AppLink } from "./app-link"
+import { usePathname } from "next/navigation"
+import { getLocaleFromPath } from "modules/shared/lib/i18n/config"
+import { translate } from "modules/shared/lib/i18n"
 
 export type HeaderNavItem = Readonly<{
-  title: string
+  titleKey: string
   href: string
   hasDropdown?: boolean
 }>
@@ -44,6 +47,8 @@ function useEnableOnFirstInteraction(): boolean {
 }
 
 export function HeaderNavIsland({ navigationItems }: { readonly navigationItems: readonly HeaderNavItem[] }): JSX.Element {
+  const pathname = usePathname()
+  const locale = getLocaleFromPath(pathname)
   const enabled: boolean = useEnableOnFirstInteraction()
   const disableDropdown: boolean = (process.env.NEXT_PUBLIC_DISABLE_NAV_DROPDOWN ?? "false").toLowerCase() === "true"
 
@@ -51,15 +56,15 @@ export function HeaderNavIsland({ navigationItems }: { readonly navigationItems:
     <>
       <nav className="hidden md:flex items-center space-x-1">
         {navigationItems.map((item) => (
-          <div key={item.title}>
+          <div key={item.titleKey}>
             {item.hasDropdown && enabled && !disableDropdown ? (
-              <NavigationDropdown title={item.title} href={item.href} />
+              <NavigationDropdown title={translate(locale, item.titleKey)} href={item.href} />
             ) : (
               <AppLink
                 href={item.href}
                 className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-all duration-200"
               >
-                {item.title}
+                {translate(locale, item.titleKey)}
               </AppLink>
             )}
           </div>

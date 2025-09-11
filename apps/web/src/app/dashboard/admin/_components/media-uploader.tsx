@@ -249,7 +249,13 @@ export function MediaUploader({
                     className="h-28 w-full rounded object-cover"
                   />
                 ) : (
-                  <video className="h-28 w-full rounded object-cover" src={p.url} muted />
+                  <video
+                    className="h-28 w-full rounded object-cover"
+                    src={p.url}
+                    muted
+                    aria-hidden="true"
+                    role="presentation"
+                  />
                 )}
                 <div className="mt-2 flex items-center justify-between gap-2">
                   <span className="truncate text-xs" title={p.file.name}>

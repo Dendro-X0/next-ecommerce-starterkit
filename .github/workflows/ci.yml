@@ -45,6 +45,10 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm run lint
 
+      - name: A11y Lint (web)
+        run: pnpm -w --filter web... run lint:a11y
+        continue-on-error: true
+
       - name: Typecheck (web)
         run: pnpm -w turbo run typecheck --filter=web...
 

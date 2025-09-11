@@ -450,6 +450,8 @@ export function ProductForm({ productId }: ProductFormProps): React.ReactElement
                             preload="metadata"
                             muted
                             playsInline
+                            aria-hidden="true"
+                            role="presentation"
                           />
                         )}
                         <div className="mt-2 flex items-center justify-between gap-2">
@@ -499,7 +501,9 @@ export function ProductForm({ productId }: ProductFormProps): React.ReactElement
                 <div className="mt-2">
                   <Label>Video preview</Label>
                   {/* basic video preview */}
-                  <video className="mt-1 w-64 rounded border" controls src={videoPreviewUrl} />
+                  <video className="mt-1 w-64 rounded border" controls src={videoPreviewUrl}>
+                    <track kind="captions" srcLang="en" label="English captions" />
+                  </video>
                 </div>
               )}
             </CardContent>
