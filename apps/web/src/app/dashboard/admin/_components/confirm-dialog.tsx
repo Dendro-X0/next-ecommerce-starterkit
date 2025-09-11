@@ -47,25 +47,23 @@ export default function ConfirmDialog(props: ConfirmDialogProps): JSX.Element | 
     return () => document.removeEventListener("keydown", onKeyDown)
   }, [open, onCancel, onOpenChange])
 
-  const overlayRef = React.useRef<HTMLDivElement | null>(null)
-  const onOverlayClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    if (e.target === overlayRef.current) {
-      onOpenChange?.(false)
-      onCancel()
-    }
+  const onOverlayClick = (): void => {
+    onOpenChange?.(false)
+    onCancel()
   }
 
   if (!open) return null
 
   return (
-    <div
-      ref={overlayRef}
-      onMouseDown={onOverlayClick}
-      className="fixed inset-0 z-50 grid place-items-center bg-black/40 backdrop-blur-[1px]"
-      aria-modal="true"
-      role="dialog"
-    >
-      <div className="w-full max-w-sm rounded-lg border bg-background p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 grid place-items-center">
+      {/* Clickable overlay as a real interactive control for a11y */}
+      <button
+        type="button"
+        aria-label="Close dialog"
+        className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"
+        onClick={onOverlayClick}
+      />
+      <div className="relative w-full max-w-sm rounded-lg border bg-background p-6 shadow-xl" role="dialog" aria-modal="true">
         <h2 className="text-lg font-semibold">{title}</h2>
         {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
         <div className="mt-5 flex items-center justify-end gap-2">

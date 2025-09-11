@@ -254,7 +254,6 @@ export function MediaUploader({
                     src={p.url}
                     muted
                     aria-hidden="true"
-                    role="presentation"
                   />
                 )}
                 <div className="mt-2 flex items-center justify-between gap-2">
