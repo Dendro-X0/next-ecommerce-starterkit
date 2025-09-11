@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
     "@repo/api",
     "@repo/mail",
     "@repo/emails",
+    "@repo/payments",
   ],
   images: {
     remotePatterns: [{ protocol: "https", hostname: "picsum.photos" }],

@@ -70,6 +70,7 @@
       "@repo/ui/*": ["../../packages/ui/src/*"],
       "@repo/auth": ["../../packages/auth/src/index.ts"],
       "@repo/mail": ["../../packages/mail/src/index.ts"],
+      "@repo/payments/*": ["../../packages/payments/src/*"],
       "@repo/*": ["../../packages/*"],
       "modules/*": ["./modules/*"]
     }

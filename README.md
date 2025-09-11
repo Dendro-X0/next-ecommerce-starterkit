@@ -17,6 +17,7 @@ This template focuses on completeness and maintainability over vanity numbers. I
 - [Frontend Architecture](./docs/frontend-architecture.md)
 - [Testing](./docs/testing.md)
 - [Deployment](./docs/deployment.md)
+- [Payments Setup](./docs/payments.md)
 - [Env Setup](./ENV_SETUP.md)
 - [Troubleshooting](./docs/troubleshooting.md)
 - [Development Mode Limitations](./docs/dev-mode-limitations.md)

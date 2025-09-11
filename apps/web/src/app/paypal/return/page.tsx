@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { paymentsPaypalApi } from "@/lib/data/payments/paypal"
+import { paymentsPaypalApi } from "@repo/payments/client/paypal"
 import { useMutation } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"

@@ -2,7 +2,7 @@
 
 import { PageHeader } from "@/app/dashboard/_components/page-header"
 import { Section } from "@/app/dashboard/_components/section"
-import { paymentsStripeApi } from "@/lib/data/payments/stripe"
+import { paymentsStripeApi } from "@repo/payments/client/stripe"
 import { Button } from "@components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card"
 import { Input } from "@components/ui/input"

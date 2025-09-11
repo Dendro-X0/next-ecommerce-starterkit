@@ -1,0 +1,20 @@
+{
+  "name": "@repo/payments",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./client/stripe": "./src/client/stripe.ts",
+    "./client/paypal": "./src/client/paypal.ts",
+    "./hooks/use-stripe-config": "./src/hooks/use-stripe-config.ts",
+    "./hooks/use-paypal-config": "./src/hooks/use-paypal-config.ts",
+    "./hooks/use-stripe-intent": "./src/hooks/use-stripe-intent.ts",
+    "./hooks/use-stripe-refund": "./src/hooks/use-stripe-refund.ts",
+    "./hooks/use-paypal-order": "./src/hooks/use-paypal-order.ts"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "@tanstack/react-query": ">=5.0.0"
+  }
+}

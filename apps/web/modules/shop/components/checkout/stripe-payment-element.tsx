@@ -1,6 +1,6 @@
 "use client"
 
-import { paymentsStripeApi } from "@/lib/data/payments/stripe"
+import { paymentsStripeApi } from "@repo/payments/client/stripe"
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { type Stripe, type StripeElements, loadStripe } from "@stripe/stripe-js"
 import { AlertCircle } from "lucide-react"
